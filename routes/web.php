@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AuthApiData;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\LessionController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SliderController;
-
+use App\Http\Controllers\SubmissionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,14 +39,14 @@ require __DIR__.'/auth.php';
 
 Route::get('/dashboard', [AuthApiData::class, 'index'])->name('dashboard');
 // slider
-Route::get('/slider', function () {
-    return view('slider');
-});
-// Route::get('/slider',[SliderController::class,'index'])->name('slider');
-Route::get('/sliders', [SliderController::class, 'store'])->name('sliders');
-Route::post('/upload', [SliderController::class, 'store'])->name('image.upload');
+Route::resource('slider', SliderController::class);
 // News
-Route::get('/news', function () {
-    return view('News.store');
-});
-Route::post('/uploadNews', [NewsController::class, 'store'])->name('news.upload');
+Route::resource('news', NewsController::class);
+// Course
+Route::resource('course',CourseController::class);
+// lession
+Route::resource('lession',LessionController::class);
+// assignment
+Route::resource('assignment',AssignmentController::class);
+// submission
+Route::resource('submission', SubmissionController::class);

@@ -22,7 +22,12 @@ class User extends Authenticatable
         'email',
         'password',
     ];
-
+    public function course(){
+        return $this->hasMany(Course::class);
+    }
+    public function submission(){
+        return $this->hasMany(Submission::class);
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

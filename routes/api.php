@@ -13,5 +13,5 @@ Route::get('/user', function (Request $request) {
 Route::post('customerRegister', [AuthApiData::class,'register']);
 Route::post('login', [AuthApiData::class,'login']);
 Route::post('logout', [AuthApiData::class, 'logout'])->middleware('auth:sanctum');
-Route::get('slider', [SliderController::class, 'index']);
-Route::get('news', [NewsController::class, 'index']);
+Route::get('sliderApi', [SliderController::class, 'ApiIndex']);
+Route::get('newsApi', [NewsController::class, 'ApiIndex']);
