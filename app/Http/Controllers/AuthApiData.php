@@ -6,67 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Device;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 class AuthApiData extends Controller
 {
-    // public function register(Request $request){
-    //     try {
-    //         $validatedData=$request->validate([
-    //             'username'=>'required|string|max:255',
-    //             'email'=>'required|email|unique:customers',
-    //             'gender'=>'required|string',
-    //             'phone'=>'required|string',
-    //             'password'=>'required|string|min:8|confirmed',
-    //             'device_type' => 'required|string',
-    //             'operating_system' => 'required|string',
-    //             'browser_name' => 'required|string',
-    //             'browser_version' => 'required|string',
-    //             'screen_resolution' => 'required|string',
-    //             'ip_address' => 'required|ip',
-    //             'location' => 'required|string',
-    //         ]);
-    //         $customer = new Customer([
-    //             'username' => $validatedData['username'],
-    //             'email' => $validatedData['email'],
-    //             'gender' => $validatedData['gender'],
-    //             'phone' => $validatedData['phone'],
-    //             'password' => Hash::make($validatedData['password']) // Hash password directly
-    //         ]);
-    //         $customer->save();
-    //         $userDevice = new Device([
-    //             'customer_id' => $customer->id,
-    //             'device_type' => $validatedData['device_type'],
-    //             'operating_system' => $validatedData['operating_system'],
-    //             'browser_name' => $validatedData['browser_name'],
-    //             'browser_version' => $validatedData['browser_version'],
-    //             'screen_resolution' => $validatedData['screen_resolution'],
-    //             'ip_address' => $validatedData['ip_address'],
-    //             'location' => $validatedData['location'],
-    //             // 'last_used' => Carbon::parse($validatedData['last_used'])->toDateTimeString()
-    //         ]);
-    //         $userDevice->save();
-    //         return response()->json(['message' => 'Customer registered successfully'], 201);
-
-    //     } catch (\Illuminate\Validation\ValidationException $e) {
-    //         return response()->json(['error' => $e->errors()], 422);
-    //     }catch(\Exception $e){
-    //         Log::error($e->getMessage());
-    //         return response()->json(['error' => 'An unexpected error occurred. Please try again.'], 500);
-    //     }
-    // }
+    public function index(){
+        $customers=Customer::all();
+        return view('dashboard', compact('customers'));
+    }
     public function register(Request $request){
         try {
-            // Validate the request data
-            $validatedData = $request->validate([
-                'username' => 'required|string|max:255',
-                'email' => 'required|email|unique:customers',
-                'gender' => 'required|string',
-                'phone' => 'required|string',
-                'password' => 'required|string|min:8|confirmed',
-                // 'password_confirmation' => 'required|string|min:8|confirmed',
+            $validatedData=$request->validate([
+                'username'=>'required|string|max:255',
+                'email'=>'required|email|unique:customers',
+                'gender'=>'required|string',
+                'phone'=>'required|string',
+                'password'=>'required|string|min:8',
                 'device_type' => 'required|string',
                 'operating_system' => 'required|string',
                 'browser_name' => 'required|string',
@@ -75,20 +30,15 @@ class AuthApiData extends Controller
                 'ip_address' => 'required|ip',
                 'location' => 'required|string',
             ]);
-    
-            DB::beginTransaction(); // Start database transaction
-    
-            // Create new Customer
-            $customer = Customer::create([
+            $customer = new Customer([
                 'username' => $validatedData['username'],
                 'email' => $validatedData['email'],
                 'gender' => $validatedData['gender'],
                 'phone' => $validatedData['phone'],
-                'password' => Hash::make($validatedData['password']), // Secure password hashing
+                'password' => Hash::make($validatedData['password']) // Hash password directly
             ]);
-    
-            // Store User Device Information
-            Device::create([
+            $customer->save();
+            $userDevice = new Device([
                 'customer_id' => $customer->id,
                 'device_type' => $validatedData['device_type'],
                 'operating_system' => $validatedData['operating_system'],
@@ -97,23 +47,18 @@ class AuthApiData extends Controller
                 'screen_resolution' => $validatedData['screen_resolution'],
                 'ip_address' => $validatedData['ip_address'],
                 'location' => $validatedData['location'],
+                // 'last_used' => Carbon::parse($validatedData['last_used'])->toDateTimeString()
             ]);
-    
-            DB::commit(); // Commit transaction
-    
+            $userDevice->save();
             return response()->json(['message' => 'Customer registered successfully'], 201);
-    
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(['error' => $e->errors()], 422);
-    
-        } catch (\Exception $e) {
-            DB::rollBack(); // Rollback changes in case of failure
-            Log::error('Registration Error: ' . $e->getMessage());
-    
+        }catch(\Exception $e){
+            Log::error($e->getMessage());
             return response()->json(['error' => 'An unexpected error occurred. Please try again.'], 500);
         }
     }
-    
     public function login(Request $request)
     {
     try {
@@ -152,4 +97,29 @@ class AuthApiData extends Controller
         return response()->json(['error' => 'An unexpected error occurred. Please try again.'], 500);
     }
     }
+    public function logout(Request $request)
+{
+    try {
+        if ($request->user()) {
+            $request->user()->tokens()->delete(); // Revoke all user tokens (for Laravel Sanctum or Passport)
+            return response()->json([
+                'status' => true,
+                'message' => 'Logout successful'
+            ], 200);
+        }
+        
+        return response()->json([
+            'status' => false,
+            'message' => 'Unauthorized'
+        ], 401);
+        
+    } catch (\Exception $e) {
+        Log::error($e->getMessage());
+        return response()->json([
+            'status' => false,
+            'message' => 'An unexpected error occurred. Please try again.'
+        ], 500);
+    }
+}
+
 }

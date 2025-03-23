@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\AuthApiData;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SliderController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,3 +33,17 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/dashboard', [AuthApiData::class, 'index'])->name('dashboard');
+// slider
+Route::get('/slider', function () {
+    return view('slider');
+});
+// Route::get('/slider',[SliderController::class,'index'])->name('slider');
+Route::get('/sliders', [SliderController::class, 'store'])->name('sliders');
+Route::post('/upload', [SliderController::class, 'store'])->name('image.upload');
+// News
+Route::get('/news', function () {
+    return view('News.store');
+});
+Route::post('/uploadNews', [NewsController::class, 'store'])->name('news.upload');
