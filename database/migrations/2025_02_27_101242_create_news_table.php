@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('news', function (Blueprint $table) {
             $table->id();
             $table->string('imageNews');
+            $table->string('status', 20)->default('active');
             $table->timestamps();
         });
     }

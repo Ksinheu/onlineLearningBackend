@@ -19,4 +19,7 @@ class Lession extends Model
     public function course(){
         return $this->BelongsTo(Course::class,'course_id');
     }
+    public function progress(){
+        return $this->hasMany(Progress::class);
+    }
 }

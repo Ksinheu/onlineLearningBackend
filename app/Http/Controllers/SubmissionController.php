@@ -26,6 +26,7 @@ class SubmissionController extends Controller
             'grade'=>'required|string',
             'feedback'=>'required|string',
         ]);
+        
         Submission::create($request->all());
         return redirect()->route('submission.index')->with('success','Submission Created successfully!');
     }
@@ -43,7 +44,8 @@ class SubmissionController extends Controller
             'grade'=>'required|string',
             'feedback'=>'required|string',
         ]);
-        Submission::update($request->all());
+        $submission=Submission::findOrFail($id);
+        $submission->update($request->all());
         return redirect()->route('submission.index')->with('success','Submission Updated successfully!');
     }
     public function destroy($id){

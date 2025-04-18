@@ -28,20 +28,19 @@
   min-width: 60px;
   text-align: center
 }
-.sidebar .logo-details .logo_name{
-  color: #fff;
-  font-size: 24px;
-  font-weight: 500;
+.sidebar .logo-details img{
+ width: 100%;
 }
-.sidebar .nav-links{
+
+.sidebar .navlinks{
   margin-top: 10px;
 }
-.sidebar .nav-links li{
+.sidebar .navlinks li{
   position: relative;
   list-style: none;
   height: 50px;
 }
-.sidebar .nav-links li a{
+.sidebar .navlinks li a{
   height: 100%;
   width: 100%;
   display: flex;
@@ -49,25 +48,25 @@
   text-decoration: none;
   transition: all 0.4s ease;
 }
-.sidebar .nav-links li a.active{
+.sidebar .navlinks li a.active{
   background: #081D45;
 }
-.sidebar .nav-links li a:hover{
+.sidebar .navlinks li a:hover{
   background: #081D45;
 }
-.sidebar .nav-links li i{
+.sidebar .navlinks li i{
   min-width: 60px;
   text-align: center;
   font-size: 18px;
   color: #fff;
 }
-.sidebar .nav-links li a .links_name{
+.sidebar .navlinks li a .links_name{
   color: #fff;
   font-size: 15px;
   font-weight: 400;
   white-space: nowrap;
 }
-.sidebar .nav-links .log_out{
+.sidebar .navlinks .log_out{
   position: absolute;
   bottom: 0;
   width: 100%;

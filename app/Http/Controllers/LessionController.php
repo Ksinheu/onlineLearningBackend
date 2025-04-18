@@ -14,6 +14,13 @@ class LessionController extends Controller
         $course=Course::all();
         return view('lession.index',compact('lession','course'));
     }
+    public function ApiIndex(){
+        $lession=Lession::all();
+        return response()->json([
+            'message'=>'Lesson retrieved scussessfuly!',
+            'course'=>$lession
+        ]);
+    }
     public function create(){
         $course=Course::all();
         return view('lession.create',compact('course'));

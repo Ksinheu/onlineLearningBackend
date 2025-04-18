@@ -22,9 +22,13 @@ class SliderController extends Controller
     {
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'nullable|string|max:20',
         ]);
         $imagePath = $request->file('image')->store('images', 'public');
-        Slider::create(['image'=> $imagePath]);
+        Slider::create([
+            'image'=> $imagePath,
+            'status' => $validated['status'] ?? 'active',
+        ]);
         return back()->with('success', 'Image uploaded successfully!')->with('imagePath', $imagePath);
         // return redirect()->route('slider.index')->with('success','Image uploaded successfully!');
     }
@@ -48,8 +52,9 @@ class SliderController extends Controller
 
 public function update(Request $request, $id)
 {
-    $request->validate([
+    $validated=$request->validate([
         'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        'status' => 'nullable|string|max:20',
     ]);
 
     $slider = Slider::findOrFail($id);
@@ -64,6 +69,7 @@ public function update(Request $request, $id)
         $imagePath = $request->file('image')->store('images', 'public');
         $slider->update(['image' => $imagePath]);
     }
+    
 
     return redirect()->route('slider.index')->with('success', 'Image updated successfully!');
 }

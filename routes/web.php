@@ -5,7 +5,9 @@ use App\Http\Controllers\AuthApiData;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessionController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubmissionController;
 use Illuminate\Support\Facades\Route;
@@ -50,3 +52,8 @@ Route::resource('lession',LessionController::class);
 Route::resource('assignment',AssignmentController::class);
 // submission
 Route::resource('submission', SubmissionController::class);
+// notification
+Route::resource('notification',NotificationController::class);
+Route::patch('/notification/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+// progress
+Route::resource('progress',ProgressController::class);

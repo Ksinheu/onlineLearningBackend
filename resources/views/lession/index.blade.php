@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 @section('content')
 <div class="col-md-12 pb-3">
     @if ($errors->any())
@@ -22,11 +22,74 @@
     });
 </script>
 @endif
+<div class="text-center fs-5 text-primary text-decoration-underline">មេរៀន</div>
+<div class="mb-3">
+    <a href="{{route('lession.create')}}" class="btn btn-success" data-bs-toggle="modal"
+    data-bs-target="#uploadModal"><i class="fa-solid fa-plus"></i> បង្កើត</a>
+</div>
+{{-- create --}}
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="uploadModalLabel">បញ្ចូលមេរៀន</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('lession.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    {{-- Course Selection --}}
+                    <div class="mb-3">
+                        <label for="course" class="form-label">Course:</label>
+                        <select name="course_id" class="form-control" required>
+                            <option value="" disabled selected>Select a course</option>
+                            @foreach ($course as $courses)
+                                <option value="{{ $courses->id }}" {{ old('course_id') == $courses->id ? 'selected' : '' }}>
+                                    {{ $courses->course_name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+    
+                    {{-- Lesson Title --}}
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title:</label>
+                        <input type="text" name="title" id="title" class="form-control"
+                            value="{{ old('title') }}" required>
+                    </div>
+    
+                    {{-- Lesson Content --}}
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Content:</label>
+                        <textarea name="content" id="content" class="form-control" required>{{ old('content') }}</textarea>
+                    </div>
+    
+                    {{-- Video URL --}}
+                    <div class="mb-3">
+                        <label for="video_url" class="form-label">Video URL:</label>
+                        <input type="url" name="video_url" id="video_url" class="form-control"
+                            value="{{ old('video_url') }}" required>
+                    </div>
+    
+                    {{-- Order Number --}}
+                    <div class="mb-3">
+                        <label for="order_num" class="form-label">Order Number:</label>
+                        <input type="number" name="order_num" class="form-control" 
+                            value="{{ old('order_num') }}" required step="0" min="0">
+                    </div>
+    
+                    {{-- Submit Button --}}
+                    <div class="text-center">
+                        <button class="btn btn-primary" type="submit">រក្សាទុក</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{-- create end --}}
       <div class="card p-5">
-          <div class="text-center fs-5 text-primary text-decoration-underline">មេរៀន</div>
-          <div class="mb-3">
-              <a href="{{route('lession.create')}}" class="btn btn-success"><i class="fa-solid fa-plus"></i> បង្កើត</a>
-          </div>
+         
           <table class="table table-hover">
             <thead>
               <th>ID</th>

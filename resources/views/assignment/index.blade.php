@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.master')
 @section('content')
-    <div class="col-md-12">
+    <div class="col-md-10">
         <div class="card p-5">
             @if ($errors->any())
                 <script>
@@ -26,7 +26,7 @@
 
             <div class="text-center fs-5 text-primary text-decoration-underline">បញ្ជីឈ្មោះមុខវិជ្ជា</div>
             <div class="mb-3">
-                <a href="{{route('course.create')}}" class="btn btn-success"><i class="fa-solid fa-plus"></i> បង្កើត</a>
+                <a href="{{route('assignment.create')}}" class="btn btn-success"><i class="fa-solid fa-plus"></i> បង្កើត</a>
             </div>
             <table class="table table-hover">
               <thead>
@@ -43,17 +43,17 @@
                 <tr>
                     <td>{{$assignments->id}}</td>
                     <td>{{$assignments->course->course_name}}</td>
-                    <td>{{$assignments->course_name}}</td>
+                    <td>{{$assignments->title}}</td>
                     <td>{{$assignments->description}}</td>
-                    <td>{{$assignments->price}}$</td>
-                    <td>{{$assignments->start_date}}</td>
+                    <td>{{$assignments->due_date}}</td>
+                    <td>{{$assignments->score}}</td>
                     <td>
-                      <a href="{{route('course.show',$assignments->id)}}" class="btn btn-warning"><i class="fa-solid fa-eye"></i></a>
-                      <a href="{{route('course.edit',$assignments->id)}}" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
-                      <form action="{{ route('course.destroy', $assignments->id) }}" method="POST" style="display:inline-block;">
+                      <a href="{{route('assignment.show',$assignments->id)}}" class="btn btn-warning"><i class="fa-solid fa-eye"></i></a>
+                      <a href="{{route('assignment.edit',$assignments->id)}}" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
+                      <form action="{{ route('assignment.destroy', $assignments->id) }}" method="POST" style="display:inline-block;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-deleted" data-id="{{$assignments->id}}" data-name="{{$assignments->course_name}}"><i class="fa-solid fa-trash"></i></button>
+                        <button type="submit" class="btn btn-danger btn-deleted" data-id="{{$assignments->id}}" data-name="{{$assignments->title}}"><i class="fa-solid fa-trash"></i></button>
                     </form>
                      </td>
                 </tr>
@@ -86,7 +86,7 @@
                         if (result.isConfirmed) {
                             // Proceed with deletion
                             const deleteForm = document.createElement('form');
-                            deleteForm.action = `{{ url('course/${sliderId}') }}`;
+                            deleteForm.action = `{{ url('assignment/${sliderId}') }}`;
                             deleteForm.method = 'POST';
                             deleteForm.innerHTML = `@csrf @method('DELETE')`;
                             document.body.appendChild(deleteForm);

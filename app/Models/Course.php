@@ -11,6 +11,7 @@ class Course extends Model
     protected $fillable=[
         'user_id',
         'course_name',
+        'imgCourse',
         'description',
         'price',
         'start_date',
@@ -24,5 +25,8 @@ class Course extends Model
     }
     public function assignment(){
         return $this->hasMany(Assignment::class);
+    }
+    public function purchase(){
+        return $this->hasMany(Purchase::class);
     }
 }

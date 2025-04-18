@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 @section('content')
     <div class="col-md-12 pb-3">
       @if ($errors->any())
@@ -24,8 +24,30 @@
   @endif
         <div class="card p-5">
             <div class="mb-3">
-                <a href="{{route('news.create')}}" class="btn btn-success"><i class="fa-solid fa-plus"></i> បង្កើត</a>
+                <a href="{{route('news.create')}}" class="btn btn-success" data-bs-toggle="modal"
+                data-bs-target="#uploadModal"><i class="fa-solid fa-plus"></i> បង្កើត</a>
             </div>
+            <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-center" id="uploadModalLabel">បញ្ចូលព័ត៌មានថ្មីៗ</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ route('news.store') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="mb-3">
+                                    <input type="file" class="form-control" name="imageNews" required>   
+                                </div>
+                                <button type="submit" class="btn btn-primary">Upload</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- edit --}}
+            
             <table class="table table-hover">
               <thead>
                 <th>ID</th>

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 @section('content')
     <div class="col-md-12 pb-3">
         <div class="card p-5">
@@ -18,6 +18,9 @@
                     <label for="course_name" class="form-label">Course Name:</label>
                     <input type="text" name="course_name" id="course_name" class="form-control"
                         value="{{$course->course_name}}" required>
+                </div>
+                <div class="mb-3">
+                    <input type="file" class="form-control" name="imgCourse" required>   
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Description:</label>

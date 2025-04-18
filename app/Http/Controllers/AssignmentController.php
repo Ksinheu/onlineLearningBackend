@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Assignment;
 use App\Models\Course;
+use COM;
 use Illuminate\Http\Request;
 
 class AssignmentController extends Controller
@@ -15,7 +16,8 @@ class AssignmentController extends Controller
         return view('assignment.index',compact('assignment','course'));
     }
     public function create(){
-        return view('assignment.create');
+        $course=Course::all();
+        return view('assignment.create',compact('course'));
     }
     public function store(Request $request){
         $request->validate([
@@ -41,7 +43,8 @@ class AssignmentController extends Controller
             'due_date'=>'required|date',
             'max_score'=>'required|numeric',
         ]);
-        Assignment::update($request->all());
+        $assignment=Assignment::findOrFail($id);
+        $assignment->update($request->all());
         return redirect()->route('assignment.index')->with('success','Assignment updated successfully!');
     }
     public function destroy($id){
