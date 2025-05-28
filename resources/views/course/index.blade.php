@@ -15,10 +15,14 @@
   @if(session('success'))
   <script>
       Swal.fire({
+        toast: true,
+        position: 'bottom-end',
           title: 'Success!',
           text: '{{ session('success') }}',
           icon: 'success',
-          confirmButtonText: 'OK'
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
       });
   </script>
   @endif
@@ -62,17 +66,12 @@
                         <input type="number" name="price" id="price" class="form-control" value="{{ old('price') }}"
                             required>
                     </div>
-
                     <div class="mb-3">
-                        <label for="start_date" class="form-label">Start Date</label>
-                        <input type="date" name="start_date" class="form-control" value="{{ old('start_date') }}"
+                        <label for="price_normal" class="form-label">Price normal($):</label>
+                        <input type="number" name="price_normal" id="price_normal" class="form-control" value="{{ old('price_normal') }}"
                             required>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="end_date" class="form-label">End Date</label>
-                        <input type="date" name="end_date" class="form-control" value="{{ old('end_date') }}" required>
-                    </div>
+                    
                     <div class="text-center "><button class="btn btn-primary" type="submit">រក្សាទុក</button></div>
                 </form>
             </div>
@@ -85,7 +84,7 @@
     <a href="{{route('course.create')}}" class="btn btn-success" data-bs-toggle="modal"
     data-bs-target="#uploadModal"><i class="fa-solid fa-plus"></i> បង្កើត</a>
 </div>
-        <div class="overview-boxes">
+        <div class="card overview-boxes">
             <table class="table table-hover">
               <thead>
                 <th>ID</th>
@@ -94,8 +93,8 @@
                 <th>Course Image</th>
                 <th>Description</th>
                 <th>Price($)</th>
-                <th>Start Date</th>
-                <th>End Date</th>
+                <th>Price normal</th>
+               
                 <th>option</th>
               </thead>
               <tbody>
@@ -107,8 +106,8 @@
                     <td><img src="{{ Storage::url($courses->imgCourse) }}" alt="" width="50px" height="50px"></td>
                     <td>{{$courses->description}}</td>
                     <td>{{$courses->price}}$</td>
-                    <td>{{$courses->start_date}}</td>
-                    <td>{{$courses->end_date}}</td>
+                    <td>{{$courses->price_normal}}</td>
+                    
                     <td>
                       <a href="{{route('course.show',$courses->id)}}" class="btn btn-warning"><i class="fa-solid fa-eye"></i></a>
                       <a href="{{route('course.edit',$courses->id)}}" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></a>

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-10">
+    <div class="col-md-10 home-content">
         <div class="card p-4">
         <div class="text-center text-primary fs-5 p-3">កែប្រែរូបស្លាយ</div>
         

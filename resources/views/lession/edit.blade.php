@@ -1,8 +1,8 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="row justify-content-center pb-3">
-    <div class="col-md-10">
+<div class="row justify-content-center home-content pb-3">
+    <div class="col-md-8">
         <div class="card p-5">
             {{-- Display Validation Errors --}}
             @if ($errors->any())
@@ -22,9 +22,9 @@
                 @method('PUT')
                 {{-- Course Selection --}}
                 <div class="mb-3">
-                    <label for="course" class="form-label">Course:</label>
+                    <label for="course" class="form-label">មុខវិជ្ជា:</label>
                     <select name="course_id" class="form-control" required>
-                        <option value="" disabled selected>Select a course</option>
+                        <option value="" disabled selected>ជ្រើសរើសមុខវិជ្ជា</option>
                         @foreach ($course as $courses)
                             <option value="{{ $courses->id }}" {{$courses->course_id == $courses->id ? 'selected' : '' }}>
                                 {{ $courses->course_name }}
@@ -35,30 +35,24 @@
 
                 {{-- Lesson Title --}}
                 <div class="mb-3">
-                    <label for="title" class="form-label">Title:</label>
+                    <label for="title" class="form-label">ចំណងជើង:</label>
                     <input type="text" name="title" id="title" class="form-control"
                         value="{{ $lession->title }}" required>
                 </div>
 
                 {{-- Lesson Content --}}
                 <div class="mb-3">
-                    <label for="content" class="form-label">Content:</label>
+                    <label for="content" class="form-label">មាតិកា:</label>
                     <textarea name="content" id="content" class="form-control" required>{{ $lession->content }}</textarea>
                 </div>
 
                 {{-- Video URL --}}
-                <div class="mb-3">
-                    <label for="video_url" class="form-label">Video URL:</label>
-                    <input type="url" name="video_url" id="video_url" class="form-control"
-                        value="{{ $lession->video_url }}" required>
+                 <div class="mb-3">
+                    <label for="video_url" class="form-label">វីដេអូ:</label>
+                    <input type="file" name="video_url" id="video_url" class="form-control" accept="video/*">
                 </div>
 
-                {{-- Order Number --}}
-                <div class="mb-3">
-                    <label for="order_num" class="form-label">Order Number:</label>
-                    <input type="number" name="order_num" class="form-control" 
-                        value="{{  $lession->order_num }}" required step="0" min="0">
-                </div>
+               
 
                 {{-- Submit Button --}}
                 <div class="text-center">

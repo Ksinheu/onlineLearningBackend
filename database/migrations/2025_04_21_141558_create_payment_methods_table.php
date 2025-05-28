@@ -13,15 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('lessions', function (Blueprint $table) {
+        Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('course_id');
-            $table->string('title');
-            $table->string('content');
-            $table->string('video_url');
-            // $table->integer('order_num');
+            $table->string('name_bank');
+            $table->string('number_bank')->unique();
+            $table->string('QR_code');
+            $table->string('phone_number')->nullable();
+            $table->enum('status', ['pending', 'active'])->default('pending');
             $table->timestamps();
-            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
         });
     }
 
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lessions');
+        Schema::dropIfExists('payment_methods');
     }
 };

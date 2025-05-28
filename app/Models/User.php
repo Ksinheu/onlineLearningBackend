@@ -31,12 +31,8 @@ class User extends Authenticatable
     public function notification(){
         return $this->hasMany(Notification::class);
     }
-    public function purchase(){
-        return $this->hasMany(Purchase::class);
-    }
-    public function progress(){
-        return $this->hasMany(Progress::class);
-    }
+  
+   
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-    <div class="col-md-12 pb-3">
+    <div class="col-md-12 home-content pb-3">
       @if ($errors->any())
       <script>
           Swal.fire({
@@ -15,10 +15,14 @@
   @if(session('success'))
   <script>
       Swal.fire({
+        toast: true,
+        position: 'bottom-end',
           title: 'Success!',
           text: '{{ session('success') }}',
           icon: 'success',
-          confirmButtonText: 'OK'
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
       });
   </script>
   @endif
@@ -28,7 +32,7 @@
                 data-bs-target="#uploadModal"><i class="fa-solid fa-plus"></i> បង្កើត</a>
             </div>
             <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title text-center" id="uploadModalLabel">បញ្ចូលព័ត៌មានថ្មីៗ</h5>

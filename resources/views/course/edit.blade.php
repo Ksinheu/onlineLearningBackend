@@ -1,6 +1,7 @@
 @extends('layouts.master')
 @section('content')
-    <div class="col-md-12 pb-3">
+<div class="row justify-content-center">
+    <div class="col-md-8 home-content pb-3">
         <div class="card p-5">
             <div class="text-center fs-5 text-primary text-decoration-underline">កែប្រែមុខវិជ្ជា</div>
             <form action="{{ route('course.update',$course->id) }}" method="POST">
@@ -10,7 +11,7 @@
                     <label for="user" class="form-label">User:</label>
                     <select name="user_id" class="form-control" required>
                         @foreach ($user as $users)
-                            <option value="{{ $users->id }}" {{$users->user_id == $users->id ? 'selected' : '' }}>{{ $users->name }}</option>
+                        <option value="{{ $users->id }}" {{ $course->user_id == $users->id ? 'selected' : '' }}>{{ $users->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -20,7 +21,21 @@
                         value="{{$course->course_name}}" required>
                 </div>
                 <div class="mb-3">
-                    <input type="file" class="form-control" name="imgCourse" required>   
+                    {{-- @if ($course->imgCourse)
+                        <div class="mb-2">
+                            <img src="{{ asset('storage/' . $course->imgCourse) }}" alt="" style="max-width: 150px;">
+                        </div>
+                    @endif
+                    <label for="imgCourse" class="form-label">Image:</label>
+                    <input type="file" class="form-control" name="imgCourse" accept="image/*" >    --}}
+                    <label for="imgCourse">QR Code:</label>
+                    @if ($course->imgCourse)
+                        <div class="mb-2">
+                            <img src="{{ asset('storage/' . $course->imgCourse) }}" alt="Current QR Code" style="max-width: 150px;">
+                        </div>
+                    @endif
+                    <input type="file" name="imgCourse" class="form-control" id="imgCourse" accept="image/*">
+                    <small class="text-muted">Leave blank if you don't want to change the QR code.</small>
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Description:</label>
@@ -34,17 +49,15 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="start_date" class="form-label">Start Date</label>
-                    <input type="date" name="start_date" class="form-control" value="{{ $course->start_date }}"
+                    <label for="price_normal" class="form-label">Price normal($):</label>
+                    <input type="number" name="price_normal" id="price_normal" class="form-control" value="{{ $course->price_normal }}"
                         required>
                 </div>
 
-                <div class="mb-3">
-                    <label for="end_date" class="form-label">End Date</label>
-                    <input type="date" name="end_date" class="form-control" value="{{ $course->end_date }}" required>
-                </div>
+                
                 <div class="text-center "><button class="btn btn-primary" type="submit">កែប្រែ</button></div>
             </form>
         </div>
     </div>
+</div>
 @endsection

@@ -3,11 +3,14 @@
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AuthApiData;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\LessionController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgressController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubmissionController;
 use Illuminate\Support\Facades\Route;
@@ -57,3 +60,15 @@ Route::resource('notification',NotificationController::class);
 Route::patch('/notification/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
 // progress
 Route::resource('progress',ProgressController::class);
+// payment
+Route::resource('payment',PurchaseController::class);
+// payment method
+Route::resource('payment_method',PaymentMethodController::class);
+// exercise
+Route::resource('exercise',ExerciseController::class);
+
+Route::get('/auth/google', [LessionController::class, 'redirect'])->name('google.auth');
+Route::get('/auth/google/callback', [LessionController::class, 'callback']);
+
+Route::get('/test-api', [LessionController::class, 'testApi'])->name('test.api');
+

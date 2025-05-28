@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-    <div class="col-md-12 pb-3">
+    <div class="col-md-12 pb-3 home-content">
         @if ($errors->any())
             <script>
                 Swal.fire({
@@ -15,10 +15,14 @@
         @if (session('success'))
             <script>
                 Swal.fire({
-                    title: 'Success!',
-                    text: '{{ session('success') }}',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
+                    toast: true,
+        position: 'bottom-end',
+          title: 'Success!',
+          text: '{{ session('success') }}',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
                 });
             </script>
         @endif

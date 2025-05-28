@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-    <div class="col-md-10">
+    <div class="col-md-10 home-content">
         <div class="card p-5">
             @if ($errors->any())
                 <script>

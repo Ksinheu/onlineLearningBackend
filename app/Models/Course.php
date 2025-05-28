@@ -14,8 +14,8 @@ class Course extends Model
         'imgCourse',
         'description',
         'price',
-        'start_date',
-        'end_date'
+        'price_normal',
+        
     ];
     public function user(){
         return $this->belongsTo(User::class,'user_id');

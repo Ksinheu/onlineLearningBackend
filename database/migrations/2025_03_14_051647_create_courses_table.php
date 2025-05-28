@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('imgCourse');
             $table->text('description');
             $table->integer('price');
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->integer('price_normal');
+            
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

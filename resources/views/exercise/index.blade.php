@@ -26,7 +26,7 @@
     });
 </script>
 @endif
-<div class="text-center fs-5 text-primary text-decoration-underline">មេរៀន</div>
+<div class="text-center fs-5 text-primary text-decoration-underline">លំហាត់</div>
 <div class="mb-3">
     <a href="{{route('lession.create')}}" class="btn btn-success" data-bs-toggle="modal"
     data-bs-target="#uploadModal"><i class="fa-solid fa-plus"></i> បង្កើត</a>
@@ -40,16 +40,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('lession.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('exercise.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     {{-- Course Selection --}}
                     <div class="mb-3">
-                        <label for="course" class="form-label">មុខវិជ្ជា:</label>
-                        <select name="course_id" class="form-control" required>
-                            <option value="" disabled selected>ជ្រើសរើសមុខវិជ្ជា</option>
-                            @foreach ($course as $courses)
-                                <option value="{{ $courses->id }}" {{ old('course_id') == $courses->id ? 'selected' : '' }}>
-                                    {{ $courses->course_name }}
+                        <label for="lesson" class="form-label">lesson:</label>
+                        <select name="lesson_id" class="form-control" required>
+                            <option value="" disabled selected>Select a lesson</option>
+                            @foreach ($lesson as $lessons)
+                                <option value="{{ $lessons->id }}" {{ old('lesson_id') == $lessons->id ? 'selected' : '' }}>
+                                    {{ $lessons->title }}
                                 </option>
                             @endforeach
                         </select>
@@ -57,25 +57,20 @@
     
                     {{-- Lesson Title --}}
                     <div class="mb-3">
-                        <label for="title" class="form-label">ចំណងជើង:</label>
-                        <input type="text" name="title" id="title" class="form-control"
-                            value="{{ old('title') }}" required>
+                        <label for="exercise_element" class="form-label">Exercise Element</label>
+                <textarea name="exercise_element" class="form-control" rows="3" required></textarea>
                     </div>
     
                     {{-- Lesson Content --}}
                     <div class="mb-3">
-                        <label for="content" class="form-label">មាតិកា:</label>
-                        <textarea name="content" id="content" class="form-control" required>{{ old('content') }}</textarea>
-                    </div>
-    
-                    {{-- Video URL --}}
-                    <div class="mb-3">
-                        <label for="video_url" class="form-label">វីដេអូ:</label>
-                         <input type="file" name="video_url" class="form-control" accept="video/*" required>
+                        <label for="images" class="form-label">Upload Images (multiple allowed)</label>
+                        <input type="file" name="images[]" class="form-control" multiple>
                     </div>
     
                     
-
+    
+                    
+    
                     {{-- Submit Button --}}
                     <div class="text-center">
                         <button class="btn btn-primary" type="submit">រក្សាទុក</button>
@@ -91,34 +86,30 @@
           <table class="table table-hover">
             <thead>
               <th>ID</th>
-              <th>Course Name</th>
-              <th>Title</th>
-              <th>Content</th>
-              <th>Video</th>
-             
+              <th>lesson</th>
+              <th>exercise_element</th>
+              <th>exercise_images</th>
               <th>option</th>
             </thead>
             <tbody>
-              @foreach($lession as $lessions)
+              @foreach($exercise as $exercises)
               <tr>
-                <td>{{ $lessions->id }}</td>
-                <td>{{ $lessions->course->course_name }}</td>
-                <td>{{ $lessions->title}}</td>
-                <td>{{ $lessions->content }}</td>
+                <td>{{ $exercises->id }}</td>
+                <td>{{ $exercises->lesson->title ?? 'N/A' }}</td>
+                <td>{{ $exercises->exercise_element }}</td>
                 <td>
-                    <video  controls style="max-width: 50%; height: auto;">
-                        <source  src="{{ asset('storage/' . $lessions->video_url) }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+                    @foreach ($exercises->exerciseImage as $img)
+        <img src="{{ asset('storage/' . $img->image_path) }}" width="60" height="60" class="me-1 mb-1 rounded">
+    @endforeach
                 </td>
                 
                   <td>
-                    <a href="{{route('lession.show',$lessions->id)}}" class="btn btn-warning"><i class="fa-solid fa-eye"></i></a>
-                    <a href="{{route('lession.edit',$lessions->id)}}" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
-                    <form action="{{ route('lession.destroy', $lessions->id) }}" method="POST" style="display:inline-block;">
+                    <a href="{{route('exercise.show',$exercises->id)}}" class="btn btn-warning"><i class="fa-solid fa-eye"></i></a>
+                    <a href="{{route('exercise.edit',$exercises->id)}}" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <form action="{{ route('exercise.destroy', $exercises->id) }}" method="POST" style="display:inline-block;">
                       @csrf
                       @method('DELETE')
-                      <button type="submit" class="btn btn-danger btn-deleted" data-id="{{$lessions->id}}" data-name="{{$lessions->title}}"><i class="fa-solid fa-trash"></i></button>
+                      <button type="submit" class="btn btn-danger btn-deleted" data-id="{{$exercises->id}}" data-name="{{$exercises->id}}"><i class="fa-solid fa-trash"></i></button>
                   </form>
                    </td>
               </tr>
@@ -149,7 +140,7 @@
                     if (result.isConfirmed) {
                         // Proceed with deletion
                         const deleteForm = document.createElement('form');
-                        deleteForm.action = `{{ url('lession/${sliderId}') }}`;
+                        deleteForm.action = `{{ url('exercise/${sliderId}') }}`;
                         deleteForm.method = 'POST';
                         deleteForm.innerHTML = `@csrf @method('DELETE')`;
                         document.body.appendChild(deleteForm);

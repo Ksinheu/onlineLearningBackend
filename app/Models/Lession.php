@@ -13,13 +13,15 @@ class Lession extends Model
         'course_id',
         'title',
         'content',
-        'video_url',
-        'order_num',
+        'video_url'
     ];
     public function course(){
         return $this->BelongsTo(Course::class,'course_id');
     }
     public function progress(){
         return $this->hasMany(Progress::class);
+    }
+    public function exercise(){
+        return $this->hasMany(Exercise::class);
     }
 }

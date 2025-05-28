@@ -9,15 +9,17 @@ class Purchase extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'user_id',
+        'customer_id',
         'course_id',
+        'pay_slip',
         'purchase_date',
         'payment_status',
     ];
-    public function user(){
-        return $this->belongsTo(User::class,'user_id');
+    public function customer(){
+        return $this->belongsTo(Customer::class,'user_id');
     }
-    public function course(){
-        return $this->belongsTo(Course::class,'course_id');
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 }

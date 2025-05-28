@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-<div class="row justify-content-center mt-4 pb-3">
+<div class="row justify-content-center home-content mt-4 pb-3">
     <div class="col-md-10">
         <div class="card p-4">
         <div class="text-center text-primary fs-5 p-3">កែប្រែព័ត៌មានថ្មីៗ</div>

@@ -41,10 +41,13 @@ return [
             'provider' => 'users',
         ],
         'customer' => [
-            'driver' => 'session',
+            'driver' => 'sanctum',
             'provider' => 'customers',
         ],
-
+        // 'payment' => [
+        //     'driver' => 'session',
+        //     'provider' => 'payments',
+        // ],
         'api' => [
             'driver' => 'sanctum',
             'provider' => 'users',
@@ -77,6 +80,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Customer::class,
         ],
+        // 'payments' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\Purchase::class,
+        // ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

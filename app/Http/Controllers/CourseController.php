@@ -35,8 +35,7 @@ class CourseController extends Controller
         'imgCourse' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         'description' => 'required|string|max:255',
         'price' => 'required|numeric',
-        'start_date' => 'required|date|after:today',
-        'end_date' => 'required|date|after:start_date',
+        'price_normal'=> 'required|numeric',
     ]);
 
     // Store the image in the public disk under imgCourse folder
@@ -49,8 +48,8 @@ class CourseController extends Controller
         'imgCourse' => $imagePath, // Make sure this matches your DB column
         'description' => $validated['description'],
         'price' => $validated['price'],
-        'start_date' => $validated['start_date'],
-        'end_date' => $validated['end_date'],
+        'price_normal' => $validated['price_normal'],
+        
     ]);
 
     return back()->with('success', 'Course created successfully!')->with('imagePath', $imagePath);
@@ -84,8 +83,7 @@ class CourseController extends Controller
         'imgCourse' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'description' => 'required|string|max:255',
         'price' => 'required|numeric',
-        'start_date' => 'required|date|after:today',
-        'end_date' => 'required|date|after:start_date',
+        'price_normal' => 'required|numeric',
     ]);
 
     // Check if a new image is uploaded
@@ -103,9 +101,7 @@ class CourseController extends Controller
     $course->course_name = $validated['course_name'];
     $course->description = $validated['description'];
     $course->price = $validated['price'];
-    $course->start_date = $validated['start_date'];
-    $course->end_date = $validated['end_date'];
-
+    $course->price_normal = $validated['price_normal'];
     $course->save();
 
     return redirect()->route('course.index')->with('success', 'Course updated successfully!');

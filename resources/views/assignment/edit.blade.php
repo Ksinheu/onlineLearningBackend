@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-<div class="col-md-12 pb-3">
+<div class="col-md-12 home-content pb-3">
     <div class="card p-5">
         <div class="text-center fs-5 text-primary text-decoration-underline">កែប្រែមុខវិជ្ជា</div>
         <form action="{{ route('assignment.update',$assignment->id) }}" method="POST">
