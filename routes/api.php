@@ -22,7 +22,7 @@ Route::post('logout', [AuthApiData::class, 'logout'])->middleware('auth:sanctum'
 Route::get('/customer', [AuthApiData::class,'indexApi']);
 Route::get('sliderApi', [SliderController::class, 'ApiIndex']);
 Route::get('courseApi', [CourseController::class, 'ApiIndex']);
-Route::get('/courseApi/{id}', [CourseController::class, 'show']);
+Route::get('/courseApi/{id}', [CourseController::class, 'showApi']);
 Route::get('/lessonApi', [LessionController::class, 'ApiIndex']);
 Route::get('/lessons/course/{courseId}', [LessionController::class, 'getLessonsByCourse']);
 
@@ -31,10 +31,10 @@ Route::get('newsApi', [NewsController::class, 'ApiIndex']);
 // purchase
 Route::middleware('auth:api')->post('/payments', [PurchaseController::class, 'store']);
 // routes/api.php
-// Route::middleware('auth:api')->post('/purchases', [PurchaseController::class, 'store'])->name('purchases.store');
+// Route::post('/purchases', [PurchaseController::class, 'store']);
 Route::post('/purchases', [PurchaseController::class, 'store']);
 // Route::post('/payment', [AuthApiData::class, 'uploadPaySlip']);
-Route::middleware('auth:sanctum')->post('/payment', [AuthApiData::class, 'uploadPaySlip']);
+Route::middleware('auth:customer')->post('/payment', [AuthApiData::class, 'uploadPaySlip']);
 
 // payment method
 Route::get('/payment_method',[PaymentMethodController::class,'indexApi']);

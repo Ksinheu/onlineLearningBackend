@@ -10,12 +10,22 @@ use Illuminate\Support\Facades\Storage;
 
 class CourseController extends Controller
 {
-    public function index(){
-        $course = Course::latest()->paginate(5);
-        $user = User::all();
-        $i = (request()->input('page', 1) - 1) * 5;
-        return view('course.index', compact('course', 'user', 'i'));
-    }
+    public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $course = Course::when($search, function ($query, $search) {
+            return $query->where('course_name', 'like', '%' . $search . '%');
+        })
+        ->latest()
+        ->paginate(5);
+
+    $user = User::all();
+    $i = (request()->input('page', 1) - 1) * 5;
+
+    return view('course.index', compact('course', 'user', 'i'));
+}
+
     public function ApiIndex(){
         $course=Course::all();
         return response()->json([
@@ -54,8 +64,12 @@ class CourseController extends Controller
 
     return back()->with('success', 'Course created successfully!')->with('imagePath', $imagePath);
 }
+public function show($id){
+     $course=Course::findOrFail($id);
+         return view('course.show', compact('course'));
+}
 
-    public function show($id){
+    public function showApi($id){
         $course = Course::with('user')->find($id); // Include related user info if needed
 
         if (!$course) {
@@ -86,17 +100,16 @@ class CourseController extends Controller
         'price_normal' => 'required|numeric',
     ]);
 
-    // Check if a new image is uploaded
-    if ($request->hasFile('imgCourse')) {
+ if ($request->hasFile('imgCourse')) {
         // Delete old image
         if ($course->imgCourse) {
             Storage::disk('public')->delete($course->imgCourse);
         }
+
         // Upload new image
-        $imagePath = $request->file('imgCourse')->store('imgCourse', 'public');
+        $imagePath = $request->file('imgCourse')->store('images', 'public');
         $course->update(['imgCourse' => $imagePath]);
     }
-
     // Update other fields
     $course->course_name = $validated['course_name'];
     $course->description = $validated['description'];

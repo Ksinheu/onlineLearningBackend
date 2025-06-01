@@ -133,6 +133,7 @@ public function login(Request $request)
 }
 
 
+
 public function logout(Request $request)
 {
     try {
@@ -156,33 +157,64 @@ public function logout(Request $request)
         return response()->json(['error' => 'An unexpected error occurred during logout.'], 500);
     }
 }
-    /**
-     * Upload a pay slip and create a payment record.
-     */
-    public function uploadPaySlip(Request $request)
-    {
-        // Validate input
-        $request->validate([
-            'customer_id' => 'required|exists:customers,id',
+
+// Add this function before the closing brace of the class
+public function uploadPaySlip(Request $request)
+{
+    try {
+        $validated = $request->validate([
             'course_id' => 'required|exists:courses,id',
-            'pay_slip' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'customer_id' => 'required|exists:customers,id',
+            'pay_slip' => 'required|string',
+            'purchase_date' => 'required|date',
+            'payment_status'=>'required|string|in:pending,completed,failed'
         ]);
+        $customers = $request->user();
+        $course = $request->course();
+        if (!$customers || !$course) {
+            return response()->json([
+                'error' => 'Unauthorized'
+            ], 401);
+        }
 
         // Handle file upload
-        $paySlipPath = $request->file('pay_slip')->store('pay_slips', 'public');
+        $file = $request->file('pay_slip');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs('payments', $filename);
 
-        // Create the payment record
-        $payment = Purchase::create([
-            'customer_id' => $request->customer_id,
-            'course_id' => $request->course_id,
-            'pay_slip' => $paySlipPath,
-            'payment_status' => 'pending',
-        ]);
+        // Create or update purchase record
+        $purchase = Purchase::updateOrCreate(
+            [
+                'customer_id' => $customers->id,
+                'course_id' => $course->id
+            ],
+            [
+                'pay_slip' => $path,
+                'purchase_date' => $validated['purchase_date'],
+                'payment_status' => $validated['payment_status']
+            ]
+        );
 
         return response()->json([
-            'message' => 'Payment submitted successfully.',
-            'payment' => $payment
-        ], 201);
+            'success' => true,
+            'message' => 'Payment slip uploaded successfully',
+            'purchase' => $purchase
+        ], 200);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return response()->json([
+            'error' => 'Validation error',
+            'details' => $e->errors()
+        ], 422);
+    } catch (\Exception $e) {
+        Log::error('Payment upload error: ' . $e->getMessage());
+        return response()->json([
+            'error' => 'An error occurred while processing your payment',
+            'details' => $e->getMessage()
+        ], 500);
+    }
 }
+
+
 
 }

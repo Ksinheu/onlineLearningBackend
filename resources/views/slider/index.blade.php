@@ -16,21 +16,32 @@
             <script>
                 Swal.fire({
                     toast: true,
-        position: 'bottom-end',
-          title: 'Success!',
-          text: '{{ session('success') }}',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
+                    position: 'bottom-end',
+                    title: 'Success!',
+                    text: '{{ session('success') }}',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
                 });
             </script>
         @endif
-        <div class="card p-5">
-            <div class="mb-3">
-                <a href="{{ route('slider.create') }}" class="btn btn-success" data-bs-toggle="modal"
-                    data-bs-target="#uploadModal"><i class="fa-solid fa-plus"></i> បង្កើត</a>
-            </div>
+        <div class="card p-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <!-- Create button (left side) -->
+        <a href="{{ route('slider.create') }}" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
+            <i class="fa-solid fa-plus"></i> បង្កើត
+        </a>
+
+        <!-- Centered title -->
+        <h5 class="mb-0 text-primary flex-grow-1 text-center">ស្លាយ</h5>
+
+        <!-- Optional placeholder to balance layout -->
+        <div style="width: 100px;"></div>
+    </div>
+</div>
+
+        <div class="card p-5 mt-4">
 
             <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -45,7 +56,8 @@
                                 <div class="mb-3">
                                     <input type="file" class="form-control" name="image" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Upload</button>
+                                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i>
+                                    រក្សាទុក</button>
                             </form>
                         </div>
                     </div>
@@ -64,9 +76,10 @@
                             <td><img src="{{ Storage::url($slider->image) }}" alt="" width="50px" height="50px">
                             </td>
                             <td>
-                                <a href="{{ route('slider.show', $slider->id) }}" class="btn btn-warning"><i
-                                        class="fa-solid fa-eye"></i></a>
-                                <a href="{{ route('slider.edit', $slider->id) }}" class="btn btn-info"><i
+                                <a href="{{ route('slider.show', $slider->id) }}" class="btn btn-warning"
+                                    data-bs-toggle="modal" data-bs-target="#showModel"><i class="fa-solid fa-eye"></i></a>
+                                <a href="{{ route('slider.edit', $slider->id) }}" class="btn btn-info"
+                                    data-bs-toggle="modal" data-bs-target="#updateModel"><i
                                         class="fa-solid fa-pen-to-square"></i></a>
                                 <form action="{{ route('slider.destroy', $slider->id) }}" method="POST"
                                     style="display:inline-block;">
@@ -80,6 +93,48 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="modal fade" id="updateModel" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="uploadModalLabel">កែប្រែរូបភាពស្លាយ</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ route('slider.update', $slider->id) }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                @method('PUT')
+                                <div class="mb-3">
+                                    <input type="file" class="form-control" name="image" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary"><i
+                                        class="fa-solid fa-pen-to-square"></i>
+                                    កែប្រែ</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="showModel" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="uploadModalLabel">មើលរូបស្លាយ</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+
+                            <img src="{{ Storage::url($slider->image) }}" class="img-fluid w-100 mt-3" alt="Slider Image"
+                                id="sliderImage">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script>
@@ -93,13 +148,13 @@
                     const sliderImage = this.getAttribute('data-name');
 
                     Swal.fire({
-                        title: 'Are you sure?',
-                        text: `You are about to delete ${sliderImage}. This action cannot be undone.`,
+                        title: 'តើអ្នកប្រាកដជាចង់លុបមែនឬទេ?',
+                        text: `លុប ${sliderImage}.`,
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#d33',
                         cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'Yes, delete it!'
+                        confirmButtonText: 'ចាស/បាទ,លុប!'
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Proceed with deletion

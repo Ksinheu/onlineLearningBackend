@@ -11,7 +11,7 @@
             <div class="mb-3">
                 <input type="file" class="form-control" name="image" required>   
             </div>
-            <button type="submit" class="btn btn-primary">Upload</button>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> កែប្រែ</button>
         </form>
     </div>
 </div>

@@ -4,7 +4,7 @@
     <div class="col-md-8 home-content pb-3">
         <div class="card p-5">
             <div class="text-center fs-5 text-primary text-decoration-underline">កែប្រែមុខវិជ្ជា</div>
-            <form action="{{ route('course.update',$course->id) }}" method="POST">
+            <form action="{{ route('course.update',$course->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="mb-3">
@@ -55,7 +55,7 @@
                 </div>
 
                 
-                <div class="text-center "><button class="btn btn-primary" type="submit">កែប្រែ</button></div>
+                <div class="text-center "><button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i> កែប្រែ</button></div>
             </form>
         </div>
     </div>

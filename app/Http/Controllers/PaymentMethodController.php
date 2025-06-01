@@ -17,7 +17,7 @@ class PaymentMethodController extends Controller
         $payment_method=Payment_method::all();
         return response()->json([
             'message'=>'Payment method retrieved scussessfuly!',
-            'Payment method'=>$payment_method
+            'Payment_method'=>$payment_method
         ]);
     }
     public function create(){
@@ -42,37 +42,47 @@ class PaymentMethodController extends Controller
         ]);
         return back()->with('success', 'Payment method created successfully!')->with('imagePath', $imagePath);
     }
+    public function show($id)
+{
+    $payment_method = Payment_method::findOrFail($id);
+    return view('payment_method.show', compact('payment_method'));
+}
     public function edit($id){
         $payment_method=Payment_method::findOrFail($id);
         return view('payment_method.edit',compact('payment_method'));
     }
-    public function update(Request $request,$id){
-        $payment_method=Payment_method::findOrFail($id);
-        $validated=$request->validate([
-            'name_bank'=>'required|string',
-            'number_bank'=>'required|numeric',
-            'QR_code'=>'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'phone_number'=>'required|regex:/^[0-9]{9,15}$/',
-            'status'=>'required|in:pending,active'
-        ]);
-        // Check if a new image is uploaded
+    public function update(Request $request, $id)
+{
+    $payment_method = Payment_method::findOrFail($id);
+
+    $validated = $request->validate([
+        'name_bank' => 'required|string',
+        'number_bank' => 'required|numeric',
+        'QR_code' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'phone_number' => 'required|regex:/^[0-9]{9,15}$/',
+        'status' => 'required|in:pending,active'
+    ]);
+
+    // Handle image upload if new image is provided
     if ($request->hasFile('QR_code')) {
-        // Delete old image
         if ($payment_method->QR_code) {
             Storage::disk('public')->delete($payment_method->QR_code);
         }
-        // Upload new image
-        $imagePath = $request->file('QR_code')->store('QR_code', 'public');
-        $payment_method->update(['QR_code' => $imagePath]);
+        $imagePath = $request->file('QR_code')->store('images', 'public');
+        $payment_method->QR_code = $imagePath;
     }
-    // Update other fields
+
+    // Update all other fields
     $payment_method->name_bank = $validated['name_bank'];
     $payment_method->number_bank = $validated['number_bank'];
     $payment_method->phone_number = $validated['phone_number'];
     $payment_method->status = $validated['status'];
+
     $payment_method->save();
-    return redirect()->route('payment_method.index')->with('success','Payment method updated successfully');
-    }
+
+    return redirect()->route('payment_method.index')->with('success', 'Payment method updated successfully');
+}
+
     public function destroy($id){
         $payment_method=Payment_method::findOrFail($id);
         // Delete the image file

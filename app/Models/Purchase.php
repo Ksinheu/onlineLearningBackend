@@ -16,7 +16,7 @@ class Purchase extends Model
         'payment_status',
     ];
     public function customer(){
-        return $this->belongsTo(Customer::class,'user_id');
+        return $this->belongsTo(Customer::class,'customer_id');
     }
     public function course()
     {

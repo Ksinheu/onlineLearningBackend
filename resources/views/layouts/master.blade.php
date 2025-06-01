@@ -110,39 +110,44 @@
             <i class='bx bx-menu sidebarBtn'></i>
             {{-- <span class="dashboard">@yield('page-title', 'ទំព័រដើម')</span> --}}
             <span class="dashboard">
-  @switch(Route::currentRouteName())
+  @php
+    $routeName = Route::currentRouteName();
+    $routePrefix = explode('.', $routeName)[0];
+@endphp
+
+@switch($routePrefix)
     @case('dashboard')
-      ទំព័រដើម
-      @break
-    @case('course.index')
-      មុខវិជ្ជា
-      @break
-    @case('lession.index')
-      មេរៀន
-      @break
-    @case('exercise.index')
-      លំហាត់
-      @break
-    @case('payment_method.index')
-      វិធីសាស្រ្ដទូទាត់
-      @break
-    @case('slider.index')
-      ស្លាយ
-      @break
-    @case('news.index')
-      ព័ត៌មាន
-      @break
+        ទំព័រដើម
+        @break
+    @case('course')
+        មុខវិជ្ជា
+        @break
+    @case('lession')
+        មេរៀន
+        @break
+    @case('exercise')
+        លំហាត់
+        @break
+    @case('payment_method')
+        វិធីសាស្រ្ដទូទាត់
+        @break
+    @case('slider')
+        ស្លាយ
+        @break
+    @case('news')
+        ព័ត៌មាន
+        @break
     @default
-      ទំព័រដើម
-  @endswitch
+        ទំព័រដើម
+@endswitch
 </span>
           </div>
-          <div class="search-box">
+          {{-- <div class="search-box">
             <input type="text" placeholder="Search...">
             <i class='bx bx-search' ></i>
-          </div>
+          </div> --}}
           <div class="profile-details">
-            {{-- <img src="images/profile.jpg" alt=""> --}}
+            <img src="{{asset('images/3135715.png')}}" alt="">
             <span class="admin_name"> {{ Auth::user()->name }}               
             </span>
             <i class='bx bx-chevron-down ' type="button" id="userDropdown"
