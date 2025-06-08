@@ -102,7 +102,7 @@
 
         <!-- Courses Table -->
         <div class="card mt-4 mb-5">
-            <div class="card-body  overview-boxes">
+            <div class="card-body  overview-boxes position-relative">
                 @if ($course->count())
                     <table class="table ">
                         <thead>
@@ -154,55 +154,51 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <div>
-                        <!-- Pagination with search query preserved -->
-                         <div class="card-footer d-flex justify-content-center">
-                
-           
-                    @if ($course->hasPages())
-                        <nav>
-                            <ul class="pagination position-relative">
-                                {{-- Previous Page Link --}}
-                                @if ($course->onFirstPage())
-                                    <li class="page-item disabled"><span class="page-link">«</span></li>
-                                @else
-                                    <li class="page-item">
-                                        <a class="page-link"
-                                            href="{{ $course->previousPageUrl() }}{{ request()->has('search') ? '&search=' . request('search') : '' }}"
-                                            rel="prev">«</a>
-                                    </li>
-                                @endif
 
-                                {{-- Pagination Elements --}}
-                                @foreach ($course->links()->elements[0] as $page => $url)
-                                    @if ($page == $course->currentPage())
-                                        <li class="page-item active"><span class="page-link">{{ $page }}</span>
-                                        </li>
-                                    @else
-                                        <li class="page-item"><a class="page-link"
-                                                href="{{ $url }}{{ request()->has('search') ? '&search=' . request('search') : '' }}">{{ $page }}</a>
-                                        </li>
-                                    @endif
-                                @endforeach
+                    <!-- Pagination with search query preserved -->
+                    <nav class="position-relative border-0 shadow-none justify-content-end ">
+                        <ul class="pagination ">
+                            {{-- Previous Page Link --}}
+                            @if ($course->onFirstPage())
+                                <li class="page-item disabled"><span class="page-link bg-light text-muted">«</span></li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link"
+                                        href="{{ $course->previousPageUrl() }}{{ request()->has('search') ? '&search=' . request('search') : '' }}"
+                                        rel="prev">«</a>
+                                </li>
+                            @endif
 
-                                {{-- Next Page Link --}}
-                                @if ($course->hasMorePages())
-                                    <li class="page-item">
-                                        <a class="page-link"
-                                            href="{{ $course->nextPageUrl() }}{{ request()->has('search') ? '&search=' . request('search') : '' }}"
-                                            rel="next">»</a>
+                            {{-- Pagination Elements --}}
+                            @foreach ($course->links()->elements[0] as $page => $url)
+                                @if ($page == $course->currentPage())
+                                    <li class="page-item active"><span class="page-link">{{ $page }}</span>
                                     </li>
                                 @else
-                                    <li class="page-item disabled"><span class="page-link">»</span></li>
+                                    <li class="page-item">
+                                        <a class="page-link bg-light text-dark"
+                                            href="{{ $url }}{{ request()->has('search') ? '&search=' . request('search') : '' }}">{{ $page }}</a>
+                                    </li>
                                 @endif
-                            </ul>
-                        </nav>
-                    @endif
-                     </div>
+                            @endforeach
+
+                            {{-- Next Page Link --}}
+                            @if ($course->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link bg-light text-dark"
+                                        href="{{ $course->nextPageUrl() }}{{ request()->has('search') ? '&search=' . request('search') : '' }}"
+                                        rel="next">»</a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <span class="page-link bg-light text-muted">»</span>
+                                </li>
+                            @endif
+                        </ul>
+                    </nav>
                 @else
                     <div class="alert alert-warning mb-0">មុខវិជ្ជាមិនមានទេ។</div>
                 @endif
-                    </div>
             </div>
         </div>
 
@@ -310,8 +306,8 @@
                             </div>
                         </div>
 
-
-
+                    </div>
+                </div>
                     </div>
                 </div>
             </div>

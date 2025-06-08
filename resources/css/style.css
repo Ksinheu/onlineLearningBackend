@@ -402,9 +402,7 @@ nav .profile-details i{
     width: 560px;
   }
 }
-.card-footer .pagination {
-        margin: 0;
-    }
+
 @media (max-width: 550px) {
   .overview-boxes .box{
     width: 100%;

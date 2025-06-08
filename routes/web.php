@@ -58,8 +58,7 @@ Route::resource('submission', SubmissionController::class);
 // notification
 Route::resource('notification',NotificationController::class);
 Route::patch('/notification/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
-// progress
-Route::resource('progress',ProgressController::class);
+
 // payment
 Route::resource('payment',PurchaseController::class);
 // payment method

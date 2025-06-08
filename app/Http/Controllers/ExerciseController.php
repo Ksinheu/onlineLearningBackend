@@ -11,11 +11,22 @@ use Illuminate\Support\Facades\Storage;
 
 class ExerciseController extends Controller
 {
-    public function index(){
-        $exercise=Exercise::latest()->paginate(5);
-        $lesson=Lession::all();
-        return view('exercise.index',compact('exercise','lesson'));
-    }
+   
+     public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $exercise=Exercise::when($search, function ($query, $search) {
+            return $query->where('title', 'like', '%' . $search . '%');
+        })
+        ->latest()
+        ->paginate(5);
+
+    $lesson=Lession::all();
+    $i = (request()->input('page', 1) - 1) * 5;
+
+    return view('exercise.index', compact('exercise','lesson', 'i'));
+}
     public function create(){
         $lesson=Lession::all();
 

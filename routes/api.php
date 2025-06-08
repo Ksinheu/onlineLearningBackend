@@ -16,7 +16,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('customerRegister', [AuthApiData::class,'register']);
-Route::get('Register', [AuthApiData::class,'indexApi']);
+Route::get('/customers/{id}', [AuthApiData::class, 'show']);
 Route::post('login', [AuthApiData::class,'login']);
 Route::post('logout', [AuthApiData::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/customer', [AuthApiData::class,'indexApi']);
@@ -25,17 +25,8 @@ Route::get('courseApi', [CourseController::class, 'ApiIndex']);
 Route::get('/courseApi/{id}', [CourseController::class, 'showApi']);
 Route::get('/lessonApi', [LessionController::class, 'ApiIndex']);
 Route::get('/lessons/course/{courseId}', [LessionController::class, 'getLessonsByCourse']);
-
 Route::get('newsApi', [NewsController::class, 'ApiIndex']);
-// Route::get('progress',[ProgressController::class,'indexApi']);
-// purchase
-Route::middleware('auth:api')->post('/payments', [PurchaseController::class, 'store']);
-// routes/api.php
-// Route::post('/purchases', [PurchaseController::class, 'store']);
-Route::post('/purchases', [PurchaseController::class, 'store']);
-// Route::post('/payment', [AuthApiData::class, 'uploadPaySlip']);
-Route::middleware('auth:customer')->post('/payment', [AuthApiData::class, 'uploadPaySlip']);
-
+Route::post('/payments', [PurchaseController::class, 'store']);
 // payment method
 Route::get('/payment_method',[PaymentMethodController::class,'indexApi']);
 Route::post('/purchases/{id}/approve', [PurchaseController::class, 'approve']);

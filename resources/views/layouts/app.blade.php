@@ -151,21 +151,6 @@
 </head>
 
 <body class="bg-secondary-subtle">
-    {{-- <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
-
-            
-            @if (isset($header))
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
-            <main>
-                {{ $slot }}
-            </main>
-        </div> --}}
     <div class="container-fluid">
 
         <div class="row">
@@ -232,20 +217,7 @@
                     </nav>
                 </div>
             </div>
-            {{-- <div class="col-2">
-                <div class="sidebar">
-                    <h2>Acme</h2>
-                    <ul>
-                        <li>Home</li>
-                        <li>Calendar</li>
-                        <li>Reports</li>
-                        <li class="active">Dashboard</li>
-                        <li>Contacts</li>
-                    </ul>
-                </div>
-                
-                
-            </div> --}}
+            
             <div class="col-10 p-3 justify-content-center">
 
 
@@ -277,19 +249,13 @@
                         </div>
                     </div>
                 </div>
-
-
-
                 @yield('content')
             </div>
 
         </div>
 
     </div>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> --}}
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>

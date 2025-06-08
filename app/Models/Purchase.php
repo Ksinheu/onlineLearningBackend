@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Purchase extends Model
 {
     use HasFactory;
+     protected $table = 'payments';
     protected $fillable=[
         'customer_id',
         'course_id',
@@ -15,8 +16,9 @@ class Purchase extends Model
         'purchase_date',
         'payment_status',
     ];
-    public function customer(){
-        return $this->belongsTo(Customer::class,'customer_id');
+     public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
     public function course()
     {

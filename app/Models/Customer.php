@@ -25,7 +25,7 @@ class Customer extends Authenticatable
         return $this->hasMany(Device::class,'customer_id');
     }
 
-    public function purchase(){
+    public function purchases(){
         return $this->hasMany(Purchase::class);
     }
 }

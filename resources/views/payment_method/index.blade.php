@@ -116,7 +116,7 @@
                             <td><img src="{{ Storage::url($payment_methods->QR_code) }}" alt="" width="50px"
                                     height="50px"></td>
                             <td>{{ $payment_methods->phone_number }}</td>
-                            <td>{{ $payment_methods->status }}</td>
+                            <td><span class="badge bg-info">{{ ucfirst($payment_methods->status) }}</span></td>
                             <td>
                                 <a href="{{ route('payment_method.show', $payment_methods->id) }}" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#showModel"><i
                                         class="fa-solid fa-eye"></i></a>

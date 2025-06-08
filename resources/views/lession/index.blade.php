@@ -1,163 +1,318 @@
 @extends('layouts.master')
 @section('content')
-<div class="col-md-12 pb-3 home-content">
-    @if ($errors->any())
-    <script>
-        Swal.fire({
-        title: 'Error!',
-        text: 'Something went wrong.',
-        icon: 'error',
-        confirmButtonText: 'Retry'
-    });
-    </script>
-@endif
+    <div class="home-content">
+        @if ($errors->any())
+            <script>
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Something went wrong.',
+                    icon: 'error',
+                    confirmButtonText: 'Retry'
+                });
+            </script>
+        @endif
 
-@if(session('success'))
-<script>
-    Swal.fire({
-        toast: true,
-        position: 'bottom-end',
-          title: 'Success!',
-          text: '{{ session('success') }}',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-    });
-</script>
-@endif
-<div class="text-center fs-5 text-primary text-decoration-underline">មេរៀន</div>
-<div class="mb-3">
-    <a href="{{route('lession.create')}}" class="btn btn-success" data-bs-toggle="modal"
-    data-bs-target="#uploadModal"><i class="fa-solid fa-plus"></i> បង្កើត</a>
-</div>
-{{-- create --}}
-<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-center" id="uploadModalLabel">បញ្ចូលមេរៀន</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('lession.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    {{-- Course Selection --}}
-                    <div class="mb-3">
-                        <label for="course" class="form-label">មុខវិជ្ជា:</label>
-                        <select name="course_id" class="form-control" required>
-                            <option value="" disabled selected>ជ្រើសរើសមុខវិជ្ជា</option>
-                            @foreach ($course as $courses)
-                                <option value="{{ $courses->id }}" {{ old('course_id') == $courses->id ? 'selected' : '' }}>
-                                    {{ $courses->course_name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-    
-                    {{-- Lesson Title --}}
-                    <div class="mb-3">
-                        <label for="title" class="form-label">ចំណងជើង:</label>
-                        <input type="text" name="title" id="title" class="form-control"
-                            value="{{ old('title') }}" required>
-                    </div>
-    
-                    {{-- Lesson Content --}}
-                    <div class="mb-3">
-                        <label for="content" class="form-label">មាតិកា:</label>
-                        <textarea name="content" id="content" class="form-control" required>{{ old('content') }}</textarea>
-                    </div>
-    
-                    {{-- Video URL --}}
-                    <div class="mb-3">
-                        <label for="video_url" class="form-label">វីដេអូ:</label>
-                         <input type="file" name="video_url" class="form-control" accept="video/*" required>
-                    </div>
-    
-                    
+        @if (session('success'))
+            <script>
+                Swal.fire({
+                    toast: true,
+                    position: 'bottom-end',
+                    title: 'Success!',
+                    text: '{{ session('success') }}',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                });
+            </script>
+        @endif
 
-                    {{-- Submit Button --}}
-                    <div class="text-center">
-                        <button class="btn btn-primary" type="submit">រក្សាទុក</button>
-                    </div>
+        <!-- Header -->
+        <div class="card p-3">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <a href="{{ route('lession.create') }}" class="btn btn-success me-2" data-bs-toggle="modal"
+                    data-bs-target="#uploadModal"><i class="fa-solid fa-plus"></i>
+                    បង្កើត</a>
+                <h5 class="mb-0 text-primary text-center flex-grow-1">មេរៀន</h5>
+                <form action="{{ route('lession.index') }}" method="GET" class="d-flex" style="width: 300px;">
+                    <input type="text" name="search" class="form-control form-control-md me-2"
+                        placeholder="ស្វែងរកមេរៀន..." value="{{ request('search') }}">
+                    <button type="submit" class="btn btn-primary btn-md"><i class="fa fa-search"></i></button>
                 </form>
             </div>
         </div>
-    </div>
-</div>
-{{-- create end --}}
-      <div class="card p-5">
-         
-          <table class="table table-hover">
-            <thead>
-              <th>ID</th>
-              <th>Course Name</th>
-              <th>Title</th>
-              <th>Content</th>
-              <th>Video</th>
-             
-              <th>option</th>
-            </thead>
-            <tbody>
-              @foreach($lession as $lessions)
-              <tr>
-                <td>{{ $lessions->id }}</td>
-                <td>{{ $lessions->course->course_name }}</td>
-                <td>{{ $lessions->title}}</td>
-                <td>{{ $lessions->content }}</td>
-                <td>
-                    <video  controls style="max-width: 50%; height: auto;">
-                        <source  src="{{ asset('storage/' . $lessions->video_url) }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </td>
-                
-                  <td>
-                    <a href="{{route('lession.show',$lessions->id)}}" class="btn btn-warning"><i class="fa-solid fa-eye"></i></a>
-                    <a href="{{route('lession.edit',$lessions->id)}}" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
-                    <form action="{{ route('lession.destroy', $lessions->id) }}" method="POST" style="display:inline-block;">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="btn btn-danger btn-deleted" data-id="{{$lessions->id}}" data-name="{{$lessions->title}}"><i class="fa-solid fa-trash"></i></button>
-                  </form>
-                   </td>
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
+        {{-- create --}}
+        <!-- Vertically centered scrollable modal -->
+        <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-center text-primary" id="uploadModalLabel">បញ្ចូលមេរៀនថ្មី</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                             <form action="{{ route('lession.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+
+            <!-- Course Selection -->
+            <div class="mb-3">
+                <label for="course_id" class="form-label">ជ្រើសរើសមុខវិជ្ជា:</label>
+                <select name="course_id" id="course_id" class="form-control" required>
+                    <option value="">-- ជ្រើសរើសមុខវិជ្ជា --</option>
+                    @foreach ($course as $c)
+                        <option value="{{ $c->id }}" {{ old('course_id') == $c->id ? 'selected' : '' }}>
+                            {{ $c->course_name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Lesson Title -->
+            <div class="mb-3">
+                <label for="title" class="form-label">ចំណងជើង:</label>
+                <input type="text" name="title" id="title" class="form-control" 
+                       value="{{ old('title') }}" required>
+            </div>
+
+            <!-- Lesson Content -->
+            <div class="mb-3">
+                <label for="content" class="form-label">មាតិកា:</label>
+                <textarea name="content" id="content" class="form-control" rows="4" required>{{ old('content') }}</textarea>
+            </div>
+
+            <!-- Video Upload -->
+            <div class="mb-3">
+                <label for="video_url" class="form-label">បញ្ចូលវីដេអូ (MP4/MOV/AVI/FLV):</label>
+                <input type="file" name="video_url" id="video_url" class="form-control" accept="video/*" required>
+                <small class="form-text text-muted">អតិបរមា 100MB</small>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-save"></i> រក្សាទុក
+                </button>
+            </div>
+        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-  </div>
-  <script>
-    // SweetAlert delete confirmation
-    document.addEventListener('DOMContentLoaded', function () {
-        const deleteButtons = document.querySelectorAll('.btn-deleted');
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function (e) {
-                e.preventDefault();
-                const sliderId = this.getAttribute('data-id');
-                const sliderImage = this.getAttribute('data-name');
-                
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: `You are about to delete ${sliderImage}. This action cannot be undone.`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Proceed with deletion
-                        const deleteForm = document.createElement('form');
-                        deleteForm.action = `{{ url('lession/${sliderId}') }}`;
-                        deleteForm.method = 'POST';
-                        deleteForm.innerHTML = `@csrf @method('DELETE')`;
-                        document.body.appendChild(deleteForm);
-                        deleteForm.submit();
-                    }
+        {{-- create end --}}
+        <!-- Lessons Table -->
+        <div class="card mt-4 mb-5">
+            <div class="card-body  overview-boxes position-relative">
+                @if ($lession->count())
+                    <table class="table ">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>ចំណងជើង</th>
+                                <th>មុខវិជ្ជា</th>
+                                <th>ព័ត៌មានបន្ថែម</th>
+                                <th>វីដេអូ</th>
+                                <th>សកម្មភាព</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($lession as $index => $lesson)
+                                <tr>
+                                    <td>{{ $i + $index + 1 }}</td>
+                                    <td>{{ $lesson->title }}</td>
+                                    <td>{{ $course->find($lesson->course_id)->course_name ?? 'N/A' }}</td>
+                                    <td>{{ Str::limit($lesson->content, 50) }}</td>
+                                    <td>
+                                        <video controls width="100px">
+            <source src="{{ asset('storage/' . $lesson->video_url) }}" type="video/mp4" >
+            Your browser does not support the video tag.
+        </video>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('lession.show', $lesson->id) }}" class="btn btn-warning"
+                                            data-bs-toggle="modal" data-bs-target="#showModal"><i
+                                                class="fa-solid fa-eye"></i></a>
+                                        <a href="{{ route('lession.edit', $lesson->id) }}" class="btn btn-info"
+                                            data-bs-toggle="modal" data-bs-target="#updateModal"><i
+                                                class="fa-solid fa-pen-to-square"></i></a>
+                                        <form action="{{ route('lession.destroy', $lesson->id) }}" method="POST"
+                                            style="display:inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-deleted"
+                                                data-id="{{ $lesson->id }}" data-name="{{ $lesson->title }}">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {{-- update --}}
+                                <!-- Vertically centered scrollable modal -->
+                                <div class="modal fade" id="updateModal" tabindex="-1"
+                                    aria-labelledby="uploadModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-center text-primary" id="uploadModalLabel">
+                                                    កែប្រែមេរៀន</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ route('lession.update', $lesson->id) }}" method="POST"
+                                                    enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    {{-- Course Selection --}}
+                                                    <div class="mb-3">
+                                                        <label for="course" class="form-label">មុខវិជ្ជា:</label>
+                                                        <select name="course_id" class="form-control" required>
+                                                            <option value="" disabled selected>ជ្រើសរើសមុខវិជ្ជា
+                                                            </option>
+                                                            @foreach ($course as $courses)
+                                                                <option value="{{ $courses->id }}"
+                                                                    {{ $courses->course_id == $courses->id ? 'selected' : '' }}>
+                                                                    {{ $courses->course_name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    {{-- Lesson Title --}}
+                                                    <div class="mb-3">
+                                                        <label for="title" class="form-label">ចំណងជើង:</label>
+                                                        <input type="text" name="title" id="title"
+                                                            class="form-control" value="{{ $lesson->title }}" required>
+                                                    </div>
+
+                                                    {{-- Lesson Content --}}
+                                                    <div class="mb-3">
+                                                        <label for="content" class="form-label">មាតិកា:</label>
+                                                        <textarea name="content" id="content" class="form-control" required>{{ $lesson->content }}</textarea>
+                                                    </div>
+
+                                                    {{-- Video URL --}}
+                                                    <div class="mb-3">
+                                                        <label for="video_url" class="form-label">វីដេអូ:</label>
+                                                        <input type="file" name="video_url" id="video_url"
+                                                            class="form-control" accept="video/*">
+                                                    </div>
+
+
+
+                                                    {{-- Submit Button --}}
+                                                    <div class="text-center">
+                                                        <button class="btn btn-primary" type="submit">រក្សាទុក</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- update end --}}
+                                {{-- show --}}
+                                <!-- Vertically centered scrollable modal -->
+                                <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="uploadModalLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-center text-primary" id="uploadModalLabel">
+                                                    មើលមេរៀន</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h1>{{ $lesson->title }}</h1>
+                                                <p><strong>Course:</strong> {{ $lesson->course->name }}</p>
+                                                <p><strong>Content:</strong> {{ $lesson->content }}</p>
+                                                <h3>Video</h3>
+                                                <video controls>
+                                                    <source src="{{ asset('storage/' . $lesson->video_url) }}"
+                                                        type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- update end --}}
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination -->
+                    <nav class="position-relative border-0 shadow-none justify-content-end">
+                        <ul class="pagination">
+                            @if ($lession->onFirstPage())
+                                <li class="page-item disabled"><span class="page-link bg-light text-muted">«</span></li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link"
+                                        href="{{ $lession->previousPageUrl() }}{{ request()->has('search') ? '&search=' . request('search') : '' }}"
+                                        rel="prev">«</a>
+                                </li>
+                            @endif
+
+                            @foreach ($lession->links()->elements[0] as $page => $url)
+                                @if ($page == $lession->currentPage())
+                                    <li class="page-item active"><span class="page-link">{{ $page }}</span></li>
+                                @else
+                                    <li class="page-item">
+                                        <a class="page-link bg-light text-dark"
+                                            href="{{ $url }}{{ request()->has('search') ? '&search=' . request('search') : '' }}">{{ $page }}</a>
+                                    </li>
+                                @endif
+                            @endforeach
+
+                            @if ($lession->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link bg-light text-dark"
+                                        href="{{ $lession->nextPageUrl() }}{{ request()->has('search') ? '&search=' . request('search') : '' }}"
+                                        rel="next">»</a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <span class="page-link bg-light text-muted">»</span>
+                                </li>
+                            @endif
+                        </ul>
+                    </nav>
+                @else
+                    <div class="alert alert-warning mb-0">មេរៀនមិនមានទេ។</div>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.btn-deleted');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const lessonId = this.getAttribute('data-id');
+                    const lessonTitle = this.getAttribute('data-name');
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: `You are about to delete "${lessonTitle}". This action cannot be undone.`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const deleteForm = document.createElement('form');
+                            deleteForm.action = `{{ url('lession/${lessonId}') }}`;
+                            deleteForm.method = 'POST';
+                            deleteForm.innerHTML = `@csrf @method('DELETE')`;
+                            document.body.appendChild(deleteForm);
+                            deleteForm.submit();
+                        }
+                    });
                 });
             });
         });
-    })
     </script>
 @endsection

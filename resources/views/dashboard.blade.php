@@ -28,8 +28,8 @@
       </div>
       <div class="box">
         <div class="right-side">
-          <div class="box-topic">ចំណូល</div>
-          <div class="number">$ </div>
+          <div class="box-topic">ចំណូលសរុប</div>
+          <div class="number">{{$totalIncome}} $ </div>
           <div class="indicator">
             <i class='bx bx-up-arrow-alt'></i>
             <span class="text">ថ្ងៃនេះ</span>
@@ -40,7 +40,7 @@
       <div class="box">
         <div class="right-side">
           <div class="box-topic">ចំនួនសិស្សបានទិញមេរៀន</div>
-          <div class="number">1</div> <span> នាក់</span>
+          <div class="number">{{$paidStudentCount}}</div> <span> នាក់</span>
           <div class="indicator">
             <i class='bx bx-up-arrow-alt'></i>
             <span class="text">ថ្ងៃនេះ</span>

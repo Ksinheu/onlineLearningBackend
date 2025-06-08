@@ -2,91 +2,106 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\Course;
+use App\Models\Customer;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
-use Livewire\Livewire;
+use Illuminate\Support\Facades\Storage;
+use App\Events\PaySlipUploaded;
 
 class PurchaseController extends Controller
 {
-public function index()
+    public function index(Request $request)
 {
-    return Purchase::with(['customer', 'course'])->orderBy('created_at', 'desc')->get();
+    $search = $request->input('search');
+
+    $payments = Purchase::with(['customer', 'course'])
+        ->when($search, function ($query, $search) {
+            $query->whereHas('customer', function ($q) use ($search) {
+                $q->where('username', 'like', "%{$search}%");
+            });
+        })
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
+
+    // Fetch customers and courses for the create modal
+    $customers = Customer::all();
+    $courses = Course::all();
+    return view('payment.index', compact('payments', 'customers', 'courses'));
 }
- public function store(Request $request)
+    public function create()
     {
-        $validator = Validator::make($request->all(), [
-            'customer_id' => 'required|exists:customers,id',
-            'course_id' => 'required|exists:courses,id',
-            'pay_slip' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-          if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors(),
-            ], 422);
-        }
-
-        $path = $request->file('pay_slip')->store('payslips', 'public');
-
-       $payment= Purchase::create([
-            'customer_id' => $request->customer_id,
-            'course_id' => $request->course_id,
-            'pay_slip' => $path,
-            'payment_status' => 'pending',
-        ]);
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Payslip uploaded successfully!',
-            'data' => $payment
-        ], 201);
-
+        $customers = Customer::all();
+        $courses = Course::all();
+        return view('payment.create', compact('customers', 'courses'));
     }
-public function approve($id) {
-    $purchase = Purchase::findOrFail($id);
-    $purchase->update(['payment_status' => 'approved']);
-    // Grant lesson access (e.g., attach course to user)
-    $purchase->customer->courses()->attach($purchase->course_id);
-    return response()->json(['message' => 'Purchase approved, lesson access granted']);
-}
-public function show($id)
-{
-    $payment = Purchase::with(['customer', 'course'])->findOrFail($id);
-    return $payment;
-}
-public function update(Request $request, $id)
-{
-    $payment = Purchase::findOrFail($id);
 
+   public function store(Request $request)
+{
     $request->validate([
+        'customer_id' => 'required|exists:customers,id',
+        'course_id' => 'required|exists:courses,id',
+        'pay_slip' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         'payment_status' => 'required|in:pending,completed,failed',
     ]);
 
-    $payment->update($request->only('payment_status'));
+    $path = $request->file('pay_slip')->store('payslips', 'public');
+    
+    $purchase = Purchase::create([
+        'customer_id' => $request->customer_id,
+        'course_id' => $request->course_id,
+        'pay_slip' => $path,
+        'payment_status' => $request->payment_status,
+    ]);
+    event(new PaySlipUploaded($purchase)); 
+    return response()->json([
+        'message' => 'Payment recorded successfully!',
+        'data' => $purchase
+    ], 201);
+}
 
-    // If approved, enroll the customer in the course
-    if ($request->payment_status === 'completed') {
-        DB::table('customer_course')->updateOrInsert(
-            [
-                'customer_id' => $payment->customer_id,
-                'course_id' => $payment->course_id,
-            ],
-            ['created_at' => now(), 'updated_at' => now()]
-        );
+public function show(Purchase $payment)
+{
+    return view('payment.show', compact('payment'));
+}
+
+    public function edit($id)
+    {
+        $payment = Purchase::findOrFail($id);
+        $customers = Customer::all();
+        $courses = Course::all();
+        return view('payment.edit', compact('payment', 'customers', 'courses'));
     }
 
-    return response()->json(['message' => 'Payment updated successfully']);
-}
+    public function update(Request $request, $id)
+    {
+        $payment = Purchase::findOrFail($id);
 
-public function destroy($id)
-{
-    $payment = Purchase::findOrFail($id);
-    $payment->delete();
+        $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'course_id' => 'required|exists:courses,id',
+            'pay_slip' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'payment_status' => 'required|in:pending,completed,failed',
+        ]);
 
-    return response()->json(['message' => 'Payment deleted successfully']);
-}
+        $data = $request->only('customer_id', 'course_id', 'payment_status');
+
+        if ($request->hasFile('pay_slip')) {
+            Storage::disk('public')->delete($payment->pay_slip);
+            $data['pay_slip'] = $request->file('pay_slip')->store('payslips', 'public');
+        }
+
+        $payment->update($data);
+
+        return redirect()->route('payment.index')->with('success', 'Payment updated successfully!');
+    }
+
+    public function destroy($id)
+    {
+        $payment = Purchase::findOrFail($id);
+        Storage::disk('public')->delete($payment->pay_slip);
+        $payment->delete();
+
+        return redirect()->route('payment.index')->with('success', 'Payment deleted successfully!');
+    }
 }

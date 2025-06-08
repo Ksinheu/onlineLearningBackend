@@ -18,6 +18,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        \App\Events\PaySlipUploaded::class => [
+            \App\Listeners\EmitPaySlipNotification::class,
+        ],
     ];
 
     /**

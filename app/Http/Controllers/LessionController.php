@@ -10,11 +10,26 @@ use Illuminate\Support\Facades\Storage;
 
 class LessionController extends Controller
 {
-    public function index(){
-        $lession=Lession::all();
-        $course=Course::all();
-        return view('lession.index',compact('lession','course'));
-    }
+    // public function index(){
+    //     $lession=Lession::all();
+    //     $course=Course::all();
+    //     return view('lession.index',compact('lession','course'));
+    // }
+    public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $lession = Lession::when($search, function ($query, $search) {
+            return $query->where('title', 'like', '%' . $search . '%');
+        })
+        ->latest()
+        ->paginate(5);
+
+    $course = Course::all();
+    $i = (request()->input('page', 1) - 1) * 5;
+
+    return view('lession.index', compact('lession', 'course', 'i'));
+}
     public function ApiIndex()
 {
     $lessons = Lession::all();
