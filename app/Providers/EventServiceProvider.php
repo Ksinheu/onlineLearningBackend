@@ -21,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\PaySlipUploaded::class => [
             \App\Listeners\EmitPaySlipNotification::class,
         ],
+        \App\Events\NewPaymentNotification::class => [
+            \App\Listeners\SendPaymentNotification::class,
+        ],
     ];
 
     /**

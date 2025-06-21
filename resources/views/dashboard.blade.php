@@ -57,11 +57,11 @@
             <table class="table  table-striped">
               <thead>
                 <th>ID</th>
-                <th>Username</th>
+                <th>ឈ្មោះ</th>
                 <th>Email</th>
-                <th>Gender</th>
-                <th>Phone Number</th>
-                <th>Status</th>
+                <th>ភេទ</th>
+                <th>លេខទូរស័ព្ទ</th>
+                <th>សកម្មភាព</th>
               </thead>
               <tbody>
                 @foreach($customers as $customer)
@@ -84,7 +84,7 @@
       </div>
       <div class="top-sales box">
         <div class="title">ការទូទាត់</div>
-        
+        <livewire:admin-payment-alerts />
       </div>
     </div>
   </div>

@@ -10,9 +10,18 @@ use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $news = News::all();
+        $search = $request->input('search');
+        // $sliders = Slider::all();
+        $news = News::when($search, function ($query, $search) {
+            return $query->where('title', 'like', '%' . $search . '%');
+        })
+        ->latest()
+        ->paginate(5);
+
+    
+    $i = (request()->input('page', 1) - 1) * 5;
         return view('News.index', compact('news'));
     }
     public function create()
@@ -23,7 +32,7 @@ class NewsController extends Controller
     {
         $request->validate([
             'imageNews' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'nullable|string|max:20',
+            'status' => 'required|string|max:20',
         ]);
         $imagePath = $request->file('imageNews')->store('imgNews', 'public');
         News::create([
@@ -34,7 +43,8 @@ class NewsController extends Controller
         // return redirect()->route('slider.index')->with('success','Image uploaded successfully!');
     }
     public function ApiIndex(){
-        $news = News::all();
+        // $news = News::all();
+         $news = News::where('status', 'active')->get();
         return response()->json([
             'message' => 'News retrieved successfully!',
             'news' => $news
@@ -55,7 +65,7 @@ class NewsController extends Controller
     {
        $validated= $request->validate([
             'imageNews' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'nullable|string|max:20',
+            'status' => 'required|string|max:20',
         ]);
 
         $news = News::findOrFail($id);
@@ -70,9 +80,9 @@ class NewsController extends Controller
             $imagePath = $request->file('imageNews')->store('newImage', 'public');
             $news->update(['imageNews' => $imagePath]);
         }
-    //     $news->status = $validated['status'];
-    // $news->save();
-
+        // Update status
+    $news->status = $validated['status'];
+    $news->save();
         return redirect()->route('news.index')->with('success', 'Image updated successfully!');
     }
     public function destroy($id)

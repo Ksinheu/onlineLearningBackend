@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthApiData;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessionController;
 use App\Http\Controllers\NewsController;
@@ -29,4 +30,5 @@ Route::get('newsApi', [NewsController::class, 'ApiIndex']);
 Route::post('/payments', [PurchaseController::class, 'store']);
 // payment method
 Route::get('/payment_method',[PaymentMethodController::class,'indexApi']);
+Route::post('/comments',[CommentController::class]);
 Route::post('/purchases/{id}/approve', [PurchaseController::class, 'approve']);

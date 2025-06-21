@@ -13,6 +13,7 @@
             });
         </script>
     @endif
-     
+     {{-- Table --}}
+    
 </div>
 

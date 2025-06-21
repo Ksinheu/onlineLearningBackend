@@ -12,16 +12,16 @@ class Lession extends Model
     protected $fillable=[
         'course_id',
         'title',
-        'content',
         'video_url'
     ];
     public function course(){
         return $this->BelongsTo(Course::class,'course_id');
     }
-    public function progress(){
-        return $this->hasMany(Progress::class);
-    }
+    
     public function exercise(){
         return $this->hasMany(Exercise::class);
+    }
+     public function content(){
+        return $this->hasMany(Content::class);
     }
 }

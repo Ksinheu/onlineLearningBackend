@@ -51,49 +51,51 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                             <form action="{{ route('lession.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
+                        <form action="{{ route('lession.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
 
-            <!-- Course Selection -->
-            <div class="mb-3">
-                <label for="course_id" class="form-label">ជ្រើសរើសមុខវិជ្ជា:</label>
-                <select name="course_id" id="course_id" class="form-control" required>
-                    <option value="">-- ជ្រើសរើសមុខវិជ្ជា --</option>
-                    @foreach ($course as $c)
-                        <option value="{{ $c->id }}" {{ old('course_id') == $c->id ? 'selected' : '' }}>
-                            {{ $c->course_name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+                            <!-- Course Selection -->
+                            <div class="mb-3">
+                                <label for="course_id" class="form-label">ជ្រើសរើសមុខវិជ្ជា:</label>
+                                <select name="course_id" id="course_id" class="form-control" required>
+                                    <option value="">-- ជ្រើសរើសមុខវិជ្ជា --</option>
+                                    @foreach ($course as $c)
+                                        <option value="{{ $c->id }}"
+                                            {{ old('course_id') == $c->id ? 'selected' : '' }}>
+                                            {{ $c->course_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-            <!-- Lesson Title -->
-            <div class="mb-3">
-                <label for="title" class="form-label">ចំណងជើង:</label>
-                <input type="text" name="title" id="title" class="form-control" 
-                       value="{{ old('title') }}" required>
-            </div>
+                            <!-- Lesson Title -->
+                            <div class="mb-3">
+                                <label for="title" class="form-label">ចំណងជើង:</label>
+                                <input type="text" name="title" id="title" class="form-control"
+                                    value="{{ old('title') }}" required>
+                            </div>
 
-            <!-- Lesson Content -->
-            <div class="mb-3">
-                <label for="content" class="form-label">មាតិកា:</label>
-                <textarea name="content" id="content" class="form-control" rows="4" required>{{ old('content') }}</textarea>
-            </div>
+                            <!-- Lesson Content -->
+                            {{-- <div class="mb-3">
+                                <label for="content" class="form-label">មាតិកា:</label>
+                                <textarea name="content" id="content" class="form-control" rows="4" required>{{ old('content') }}</textarea>
+                            </div> --}}
 
-            <!-- Video Upload -->
-            <div class="mb-3">
-                <label for="video_url" class="form-label">បញ្ចូលវីដេអូ (MP4/MOV/AVI/FLV):</label>
-                <input type="file" name="video_url" id="video_url" class="form-control" accept="video/*" required>
-                <small class="form-text text-muted">អតិបរមា 100MB</small>
-            </div>
+                            <!-- Video Upload -->
+                            <div class="mb-3">
+                                <label for="video_url" class="form-label">បញ្ចូលវីដេអូ (MP4/MOV/AVI/FLV):</label>
+                                <input type="file" name="video_url" id="video_url" class="form-control" accept="video/*"
+                                    required>
+                                <small class="form-text text-muted">អតិបរមា 100MB</small>
+                            </div>
 
-            <!-- Submit Button -->
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-save"></i> រក្សាទុក
-                </button>
-            </div>
-        </form>
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-save"></i> រក្សាទុក
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -109,7 +111,7 @@
                                 <th>#</th>
                                 <th>ចំណងជើង</th>
                                 <th>មុខវិជ្ជា</th>
-                                <th>ព័ត៌មានបន្ថែម</th>
+                                {{-- <th>ព័ត៌មានបន្ថែម</th> --}}
                                 <th>វីដេអូ</th>
                                 <th>សកម្មភាព</th>
                             </tr>
@@ -120,20 +122,19 @@
                                     <td>{{ $i + $index + 1 }}</td>
                                     <td>{{ $lesson->title }}</td>
                                     <td>{{ $course->find($lesson->course_id)->course_name ?? 'N/A' }}</td>
-                                    <td>{{ Str::limit($lesson->content, 50) }}</td>
+                                    {{-- <td>{{ Str::limit($lesson->content, 50) }}</td> --}}
                                     <td>
                                         <video controls width="100px">
-            <source src="{{ asset('storage/' . $lesson->video_url) }}" type="video/mp4" >
-            Your browser does not support the video tag.
-        </video>
+                                            <source src="{{ asset('storage/' . $lesson->video_url) }}" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
                                     </td>
                                     <td>
                                         <a href="{{ route('lession.show', $lesson->id) }}" class="btn btn-warning"
-                                            data-bs-toggle="modal" data-bs-target="#showModal"><i
+                                            data-bs-toggle="modal" data-bs-target="#showModal{{$lesson->id}}"><i
                                                 class="fa-solid fa-eye"></i></a>
                                         <a href="{{ route('lession.edit', $lesson->id) }}" class="btn btn-info"
-                                            data-bs-toggle="modal" data-bs-target="#updateModal"><i
-                                                class="fa-solid fa-pen-to-square"></i></a>
+                                            data-bs-toggle="modal" data-bs-target="#updateModal{{$lesson->id}}"><i class="fa-solid fa-pen"></i></a>
                                         <form action="{{ route('lession.destroy', $lesson->id) }}" method="POST"
                                             style="display:inline-block;">
                                             @csrf
@@ -147,7 +148,7 @@
                                 </tr>
                                 {{-- update --}}
                                 <!-- Vertically centered scrollable modal -->
-                                <div class="modal fade" id="updateModal" tabindex="-1"
+                                <div class="modal fade" id="updateModal{{$lesson->id}}" tabindex="-1"
                                     aria-labelledby="uploadModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
                                         <div class="modal-content">
@@ -185,10 +186,10 @@
                                                     </div>
 
                                                     {{-- Lesson Content --}}
-                                                    <div class="mb-3">
+                                                    {{-- <div class="mb-3">
                                                         <label for="content" class="form-label">មាតិកា:</label>
                                                         <textarea name="content" id="content" class="form-control" required>{{ $lesson->content }}</textarea>
-                                                    </div>
+                                                    </div> --}}
 
                                                     {{-- Video URL --}}
                                                     <div class="mb-3">
@@ -201,7 +202,7 @@
 
                                                     {{-- Submit Button --}}
                                                     <div class="text-center">
-                                                        <button class="btn btn-primary" type="submit">រក្សាទុក</button>
+                                                        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-pen"></i> កែប្រែ</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -211,7 +212,7 @@
                                 {{-- update end --}}
                                 {{-- show --}}
                                 <!-- Vertically centered scrollable modal -->
-                                <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="uploadModalLabel"
+                                <div class="modal fade" id="showModal{{$lesson->id}}" tabindex="-1" aria-labelledby="uploadModalLabel"
                                     aria-hidden="true">
                                     <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
                                         <div class="modal-content">
@@ -223,8 +224,8 @@
                                             </div>
                                             <div class="modal-body">
                                                 <h1>{{ $lesson->title }}</h1>
-                                                <p><strong>Course:</strong> {{ $lesson->course->name }}</p>
-                                                <p><strong>Content:</strong> {{ $lesson->content }}</p>
+                                                <p><strong>Course:</strong> {{  $course->find($lesson->course_id)->course_name ?? 'N/A' }}</p>
+                                                {{-- <p><strong>Content:</strong> {{ $lesson->content }}</p> --}}
                                                 <h3>Video</h3>
                                                 <video controls>
                                                     <source src="{{ asset('storage/' . $lesson->video_url) }}"
@@ -278,7 +279,7 @@
                         </ul>
                     </nav>
                 @else
-                    <div class="alert alert-warning mb-0">មេរៀនមិនមានទេ។</div>
+                    <div class="alert alert-warning">មេរៀនមិនមានទេ។</div>
                 @endif
             </div>
         </div>

@@ -10,35 +10,53 @@ use Illuminate\Support\Facades\Storage;
 
 class SliderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $sliders = Slider::all();
+        $search = $request->input('search');
+        // $sliders = Slider::all();
+        $sliders = Slider::when($search, function ($query, $search) {
+            return $query->where('title', 'like', '%' . $search . '%');
+        })
+        ->latest()
+        ->paginate(5);
+
+    
+    $i = (request()->input('page', 1) - 1) * 5;
         return view('slider.index',compact('sliders'));
     }
     public function create(){
         return view('slider.create');
     }
     public function store(Request $request)
-    {
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'nullable|string|max:20',
-        ]);
-        $imagePath = $request->file('image')->store('images', 'public');
-        Slider::create([
-            'image'=> $imagePath,
-            'status' => $validated['status'] ?? 'active',
-        ]);
-        return back()->with('success', 'Image uploaded successfully!')->with('imagePath', $imagePath);
-        // return redirect()->route('slider.index')->with('success','Image uploaded successfully!');
-    }
-    public function ApiIndex(){
-        $sliders = Slider::all();
-        return response()->json([
-            'message' => 'Sliders retrieved successfully!',
-            'sliders' => $sliders
-        ]);
-    }
+{
+    $validated = $request->validate([
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'status' => 'required|string|max:20',
+    ]);
+
+    // Upload and store the image
+    $imagePath = $request->file('image')->store('images', 'public');
+
+    // Create new slider
+    Slider::create([
+        'image' => $imagePath,
+        'status' => $validated['status'],
+    ]);
+
+    return redirect()->route('slider.index')->with('success', 'Slider created successfully!');
+}
+
+    public function ApiIndex()
+{
+    // Only return sliders with 'active' status
+    $sliders = Slider::where('status', 'active')->get();
+
+    return response()->json([
+        'message' => 'Sliders retrieved successfully!',
+        'sliders' => $sliders
+    ]);
+}
+
     public function show($id)
 {
     $slider = Slider::findOrFail($id);
@@ -52,9 +70,9 @@ class SliderController extends Controller
 
 public function update(Request $request, $id)
 {
-    $validated=$request->validate([
+    $validated = $request->validate([
         'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-        'status' => 'nullable|string|max:20',
+        'status' => 'required|string|max:20',
     ]);
 
     $slider = Slider::findOrFail($id);
@@ -67,12 +85,16 @@ public function update(Request $request, $id)
 
         // Upload new image
         $imagePath = $request->file('image')->store('images', 'public');
-        $slider->update(['image' => $imagePath]);
+        $slider->image = $imagePath;
     }
-    
+
+    // Update status
+    $slider->status = $validated['status'];
+    $slider->save();
 
     return redirect()->route('slider.index')->with('success', 'Image updated successfully!');
 }
+
 public function destroy($id)
 {
     $slider = Slider::findOrFail($id);

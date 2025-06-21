@@ -13,13 +13,7 @@ class PaymentMethodController extends Controller
         $payment_method=Payment_method::latest()->paginate(5);
         return view('payment_method.index',compact('payment_method'));
     }
-    public function indexApi(){
-        $payment_method=Payment_method::all();
-        return response()->json([
-            'message'=>'Payment method retrieved scussessfuly!',
-            'Payment_method'=>$payment_method
-        ]);
-    }
+ 
     public function create(){
         return view('payment_method.create');
     }
@@ -41,6 +35,15 @@ class PaymentMethodController extends Controller
             'status'=>$validated['status']
         ]);
         return back()->with('success', 'Payment method created successfully!')->with('imagePath', $imagePath);
+    }
+       public function indexApi(){
+        $payment_method=Payment_method::all();
+         // Only return sliders with 'active' status
+    // $payment_method = Payment_method::where('status', 'active')->get();
+        return response()->json([
+            'message'=>'Payment method retrieved scussessfuly!',
+            'Payment_method'=>$payment_method
+        ]);
     }
     public function show($id)
 {

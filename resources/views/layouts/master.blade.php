@@ -7,7 +7,7 @@
      <meta name="description" content="description"/>
     <meta name="author" content="author" />
     <meta name="keywords" content="keywords" />
-    <title>Document</title>
+    <title>Pccacademy</title>
     <link rel="shortcut icon" href="{{ asset('images/pcc-logo.png') }}" type="image/png" />
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-       
+
 </head>
 <body>
   <div class="container-fluid">
@@ -28,67 +28,55 @@
         <ul class="navlinks">
           <li>
             <a href="{{ route('dashboard') }}" class="{{ Request::routeIs('dashboard') ? 'active' : '' }}">
-              <i class='bx bx-grid-alt' ></i>
+              <i class="fa-solid fa-house"></i>
               <span class="links_name">ទំព័រដើម</span>
             </a>
           </li>
           <li>
             <a href="{{ route('course.index') }}" class="{{ Request::routeIs('course.index') ? 'active' : '' }}">
-              <i class='bx bx-box' ></i>
+             <i class="fa-solid fa-book"></i>
               <span class="links_name">មុខវិជ្ជា</span>
             </a>
           </li>
           <li>
             <a href="{{ route('lession.index') }}" class="{{ Request::routeIs('lession.index') ? 'active' : '' }}">
-              <i class='bx bx-list-ul' ></i>
+              <i class="fa-solid fa-book-open-reader"></i>
               <span class="links_name">មេរៀន</span>
+            </a>
+          </li>
+           <li>
+            <a href="{{ route('content.index') }}" class="{{ Request::routeIs('content.index') ? 'active' : '' }}">
+              <i class="fa-solid fa-bookmark"></i>
+              <span class="links_name">មាតិកាមេរៀន</span>
             </a>
           </li>
           <li>
             <a href="{{route('exercise.index')}}"  class="{{ Request::routeIs('exercise.index') ? 'active' : '' }}">
-              <i class='bx bx-cog' ></i>
+              <i class="fa-solid fa-file"></i>
               <span class="links_name">លំហាត់</span>
             </a>
           </li>
           <li>
-            <a href="{{ route('assignment.index') }}" class="{{ Request::routeIs('assignment.index') ? 'active' : '' }}">
-              <i class='bx bx-pie-chart-alt-2' ></i>
-              <span class="links_name">Assignment</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ route('notification.index') }}" class="{{ Request::routeIs('notification.index') ? 'active' : '' }}">
-              <i class='bx bx-coin-stack' ></i>
-              <span class="links_name">Notification</span>
-            </a>
-          </li>
-          <li>
             <a href="{{ route('payment.index') }}" class="{{ Request::routeIs('payment.index') ? 'active' : '' }}">
-              <i class='bx bx-book-alt' ></i>
+              <i class="fa-solid fa-money-bill"></i>
               <span class="links_name">ការទូទាត់</span>
             </a>
           </li>
           <li>
             <a href="{{ route('payment_method.index') }}" class="{{ Request::routeIs('payment_method.index') ? 'active' : '' }}">
-              <i class='bx bx-book-alt' ></i>
+              <i class="fa-solid fa-credit-card"></i>
               <span class="links_name">វិធីសាស្រ្តទូទាត់</span>
             </a>
           </li>
           <li>
-            <a href="#">
-              <i class='bx bx-user' ></i>
-              <span class="links_name">Reviews</span>
-            </a>
-          </li>
-          <li>
             <a href="{{ route('slider.index') }}"  class="{{ Request::routeIs('slider.index') ? 'active' : '' }}">
-              <i class='bx bx-message' ></i>
+              <i class="fa-solid fa-sliders"></i>
               <span class="links_name">ស្លាយ</span>
             </a>
           </li>
           <li>
             <a href="{{ route('news.index') }}"  class="{{ Request::routeIs('news.index') ? 'active' : '' }}">
-              <i class='bx bx-heart' ></i>
+              <i class="fa-solid fa-newspaper"></i>
               <span class="links_name">ព័ត៌មាន</span>
             </a>
           </li>
@@ -126,6 +114,12 @@
     @case('lession')
         មេរៀន
         @break
+    @case('content')
+        មាតិកាមេរៀន
+        @break
+    @case('payment')
+        ទូទាត់
+        @break
     @case('exercise')
         លំហាត់
         @break
@@ -151,12 +145,12 @@
             <img src="{{asset('images/3135715.png')}}" alt="">
             <span class="admin_name"> {{ Auth::user()->name }}               
             </span>
-            <i class='bx bx-chevron-down ' type="button" id="userDropdown"
+            {{-- <i class='bx bx-chevron-down ' type="button" id="userDropdown"
             data-bs-toggle="dropdown" aria-expanded="false" ></i>
             <ul class="dropdown-menu" aria-labelledby="userDropdown">
               <!-- Profile Link -->
               <li><a class="dropdown-item"
-                      href="{{ route('profile.edit') }}">{{ __('Profile') }}</a></li>
+                      href="{{ route('profile.edit') }}">{{ __('Profile') }}</a></li> --}}
           </ul>
           </div>
         </nav>

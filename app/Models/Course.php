@@ -29,4 +29,10 @@ class Course extends Model
     public function purchase(){
         return $this->hasMany(Purchase::class);
     }
+    public function content(){
+        return $this->hasMany(Content::class);
+    }
+    public function comment(){
+        return $this->hasMany(Comment::class);
+    }
 }

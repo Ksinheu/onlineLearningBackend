@@ -7,7 +7,8 @@ use App\Models\Customer;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Events\PaySlipUploaded;
+use App\Events\NewPaymentNotification;
+use Illuminate\Support\Facades\Http;
 
 class PurchaseController extends Controller
 {
@@ -53,7 +54,19 @@ class PurchaseController extends Controller
         'pay_slip' => $path,
         'payment_status' => $request->payment_status,
     ]);
-    event(new PaySlipUploaded($purchase)); 
+    // event(new NewPaymentNotification($purchase)); 
+
+    //  Send Telegram Notification
+    $token = '7656164245:AAHru3x35rIVFfkd_Xx5e7tT83weu1kWIDA';
+    $chat_id = '-4849538103';
+    $text = "សាកល្បង" . now();
+
+    Http::get("https://api.telegram.org/bot{$token}/sendMessage", [
+        'chat_id' => $chat_id,
+        'text' => $text,
+        'parse_mode' => 'HTML',
+    ]);
+
     return response()->json([
         'message' => 'Payment recorded successfully!',
         'data' => $purchase

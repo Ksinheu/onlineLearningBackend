@@ -28,4 +28,7 @@ class Customer extends Authenticatable
     public function purchases(){
         return $this->hasMany(Purchase::class);
     }
+     public function comment(){
+        return $this->hasMany(Comment::class);
+    }
 }

@@ -72,7 +72,6 @@ class LessionController extends Controller
     $validated = $request->validate([
         'course_id' => 'required|exists:courses,id',
         'title' => 'required|string|max:255',
-        'content' => 'required|string|max:255',
         'video_url' => 'required|file|mimes:mp4,mov,avi,flv|max:102400', // Max 100MB
     ]);
 
@@ -83,7 +82,6 @@ class LessionController extends Controller
     $lesson = Lession::create([
         'course_id' => $validated['course_id'],
         'title' => $validated['title'],
-        'content' => $validated['content'],
         'video_url' => $path, // stored path
     ]);
 
@@ -104,7 +102,6 @@ class LessionController extends Controller
     $validated = $request->validate([
         'course_id' => 'required|exists:courses,id',
         'title' => 'required|string|max:255',
-        'content' => 'required|string|max:255',
         'video_url' => 'nullable|file|mimes:mp4,mov,avi,flv|max:102400', // optional video update
     ]);
 
@@ -125,7 +122,6 @@ class LessionController extends Controller
     // Update other fields
     $lesson->course_id = $validated['course_id'];
     $lesson->title = $validated['title'];
-    $lesson->content = $validated['content'];
     $lesson->save();
 
     return redirect()->route('lession.index')->with('success', 'Lesson updated successfully!');

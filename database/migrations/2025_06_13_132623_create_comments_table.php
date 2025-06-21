@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('lessions', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('course_id');
-            $table->string('title');
-            $table->string('video_url');
-            // $table->integer('order_num');
+            $table->unsignedBigInteger('customer_id');
+            $table->text('comment');
+            $table->enum('read_status', ['pending', 'active'])->default('pending');
             $table->timestamps();
-            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
         });
     }
 
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lessions');
+        Schema::dropIfExists('comments');
     }
 };

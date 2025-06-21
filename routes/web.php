@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AuthApiData;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ContentController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\LessionController;
@@ -9,7 +11,6 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubmissionController;
@@ -65,9 +66,16 @@ Route::resource('payment',PurchaseController::class);
 Route::resource('payment_method',PaymentMethodController::class);
 // exercise
 Route::resource('exercise',ExerciseController::class);
+// content
+Route::resource('content',ContentController::class);
+Route::resource('comments', CommentController::class);
 
-Route::get('/auth/google', [LessionController::class, 'redirect'])->name('google.auth');
-Route::get('/auth/google/callback', [LessionController::class, 'callback']);
+Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/payments', \App\Http\Livewire\AdminPaymentAlerts::class)->name('payments');
+});
 
-Route::get('/test-api', [LessionController::class, 'testApi'])->name('test.api');
+// Route::get('/auth/google', [LessionController::class, 'redirect'])->name('google.auth');
+// Route::get('/auth/google/callback', [LessionController::class, 'callback']);
+
+// Route::get('/test-api', [LessionController::class, 'testApi'])->name('test.api');
 

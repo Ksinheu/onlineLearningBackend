@@ -8,6 +8,7 @@ use App\Models\Device;
 use App\Models\Purchase;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
@@ -226,4 +227,27 @@ event(new \App\Events\PaySlipUploaded($purchase));
             ], 500);
         }
     }
+    public function resetPassword(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email|exists:customers,email',
+        'token' => 'required',
+        'password' => 'required|string|min:8|confirmed',
+    ]);
+
+    $resetRecord = DB::table('password_resets')->where('email', $request->email)->first();
+
+    if (!$resetRecord || !Hash::check($request->token, $resetRecord->token)) {
+        return response()->json(['error' => 'Invalid or expired token'], 400);
+    }
+
+    Customer::where('email', $request->email)->update([
+        'password' => Hash::make($request->password),
+    ]);
+
+    DB::table('password_resets')->where('email', $request->email)->delete();
+
+    return response()->json(['message' => 'Password has been reset successfully']);
+}
+
 }
