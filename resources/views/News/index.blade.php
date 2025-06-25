@@ -87,7 +87,7 @@
                             <td><img src="{{ Storage::url($new->imageNews) }}" alt="" width="50px" height="50px">
                             </td>
                             <td><span
-                                    class="badge {{ $new->status === 'active' ? 'bg-success' : 'bg-secondary' }}">{{ ucfirst($new->status) }}</span>
+                                    class="p-2 badge {{ $new->status === 'active' ? 'bg-success' : 'bg-secondary' }}">{{ ucfirst($new->status) }}</span>
                             </td>
                             <td>
                                 <a href="{{ route('news.show', $new->id) }}" class="btn btn-warning" data-bs-toggle="modal"

@@ -65,7 +65,7 @@
           <li>
             <a href="{{ route('payment_method.index') }}" class="{{ Request::routeIs('payment_method.index') ? 'active' : '' }}">
               <i class="fa-solid fa-credit-card"></i>
-              <span class="links_name">វិធីសាស្រ្តទូទាត់</span>
+              <span class="links_name">ប្រភេទធនាគារ</span>
             </a>
           </li>
           <li>
@@ -124,7 +124,7 @@
         លំហាត់
         @break
     @case('payment_method')
-        វិធីសាស្រ្ដទូទាត់
+        ប្រភេទធនាគារ
         @break
     @case('slider')
         ស្លាយ

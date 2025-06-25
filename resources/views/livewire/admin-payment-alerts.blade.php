@@ -33,7 +33,22 @@
 </div>
  --}}
 
- <div wire:poll.5s></div> {{-- Empty div to enable polling --}}
+ <div wire:poll.5s>
+@if($newPayments->isNotEmpty())
+        @foreach($newPayments as $payment)
+            <div class="alert alert-warning d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ $payment->customer->name }}</strong> submitted payment for 
+                    <strong>{{ $payment->course->title }}</strong>.
+                </div>
+                <a href="{{ route('admin.payments') }}" class="btn btn-sm btn-primary">Review</a>
+            </div>
+        @endforeach
+    @else
+        <div class="alert alert-success">No new payments at the moment.</div>
+    @endif    
+
+</div> {{-- Empty div to enable polling --}}
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

@@ -72,7 +72,7 @@ class LessionController extends Controller
     $validated = $request->validate([
         'course_id' => 'required|exists:courses,id',
         'title' => 'required|string|max:255',
-        'video_url' => 'required|file|mimes:mp4,mov,avi,flv|max:102400', // Max 100MB
+        'video_url' => 'required|file|mimes:mp4,mov,avi,flv|max:204800', // Max 100MB
     ]);
 
     // Store video in storage/app/public/videos

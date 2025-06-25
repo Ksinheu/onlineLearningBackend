@@ -6,11 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Device;
 use App\Models\Purchase;
-use Carbon\Carbon;
+// use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Carbon;
 
 class AuthApiData extends Controller
 {
@@ -28,9 +33,9 @@ class AuthApiData extends Controller
         });
         // Count students who completed payment
         $paidStudentCount = Purchase::where('payment_status', 'completed')
-                                    ->distinct('customer_id')
-                                    ->count('customer_id');
-        return view('dashboard', compact('customers', 'count', 'countAll','totalIncome','paidStudentCount'));
+            ->distinct('customer_id')
+            ->count('customer_id');
+        return view('dashboard', compact('customers', 'count', 'countAll', 'totalIncome', 'paidStudentCount'));
     }
     public function indexApi()
     {
@@ -128,22 +133,22 @@ class AuthApiData extends Controller
         }
     }
 
-public function show($id)
-{
-    $customer = Customer::find($id);
+    public function show($id)
+    {
+        $customer = Customer::find($id);
 
-    if (!$customer) {
-        return response()->json(['error' => 'Customer not found'], 404);
+        if (!$customer) {
+            return response()->json(['error' => 'Customer not found'], 404);
+        }
+
+        return response()->json([
+            'id' => $customer->id,
+            'username' => $customer->username,
+            'email' => $customer->email,
+            'phone' => $customer->phone,
+            'gender' => $customer->gender
+        ]);
     }
-
-    return response()->json([
-        'id' => $customer->id,
-        'username' => $customer->username,
-        'email' => $customer->email,
-        'phone' => $customer->phone,
-        'gender' => $customer->gender
-    ]);
-}
 
 
     public function logout(Request $request)
@@ -206,8 +211,8 @@ public function show($id)
                     'payment_status' => $validated['payment_status']
                 ]
             );
-// Dispatch the event here
-event(new \App\Events\PaySlipUploaded($purchase));
+            // Dispatch the event here
+            event(new \App\Events\PaySlipUploaded($purchase));
 
             return response()->json([
                 'success' => true,
@@ -227,27 +232,58 @@ event(new \App\Events\PaySlipUploaded($purchase));
             ], 500);
         }
     }
-    public function resetPassword(Request $request)
+ 
+    public function forgotPassword(Request $request)
+{
+    $request->validate(['email' => 'required|email']);
+
+        $status = Password::sendResetLink($request->only('email'));
+
+        if ($status === Password::RESET_LINK_SENT) {
+            return response()->json([
+                'message' => 'Reset link sent successfully.',
+                'status' => $status,
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => 'Failed to send reset link.',
+            'errors' => ['email' => [__($status)]],
+        ], 422);
+}
+public function resetPassword(Request $request)
 {
     $request->validate([
-        'email' => 'required|email|exists:customers,email',
-        'token' => 'required',
-        'password' => 'required|string|min:8|confirmed',
-    ]);
+            'token'    => 'required',
+            'email'    => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
 
-    $resetRecord = DB::table('password_resets')->where('email', $request->email)->first();
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                    'remember_token' => Str::random(60),
+                ])->save();
 
-    if (!$resetRecord || !Hash::check($request->token, $resetRecord->token)) {
-        return response()->json(['error' => 'Invalid or expired token'], 400);
-    }
+                event(new PasswordReset($user));
+            }
+        );
 
-    Customer::where('email', $request->email)->update([
-        'password' => Hash::make($request->password),
-    ]);
+        if ($status === Password::PASSWORD_RESET) {
+            return response()->json([
+                'message' => 'Password has been reset successfully.',
+                'status' => $status,
+            ], 200);
+        }
 
-    DB::table('password_resets')->where('email', $request->email)->delete();
-
-    return response()->json(['message' => 'Password has been reset successfully']);
+        return response()->json([
+            'message' => 'Password reset failed.',
+            'errors' => ['email' => [__($status)]],
+        ], 422);
+    
 }
 
+   
 }

@@ -90,7 +90,7 @@
                             <td><img src="{{ Storage::url($slider->image) }}" alt="" width="50px" height="50px">
                             </td>
                             <td><span
-                                    class="badge {{ $slider->status === 'active' ? 'bg-success' : 'bg-secondary' }}">{{ ucfirst($slider->status) }}</span>
+                                    class="p-2 badge {{ $slider->status === 'active' ? 'bg-success' : 'bg-secondary' }}">{{ ucfirst($slider->status) }}</span>
                             </td>
                             <td>
                                 <a href="{{ route('slider.show', $slider->id) }}" class="btn btn-warning"
@@ -126,7 +126,7 @@
                                                 @if ($slider->image)
                                                     <div class="mb-2">
                                                         <img src="{{ asset('storage/' . $slider->image) }}"
-                                                            alt="Current QR Code" style="max-width: 150px;">
+                                                            alt="Current image" style="max-width: 150px;">
                                                     </div>
                                                 @endif
                                                 <input type="file" name="image" class="form-control" id="imgCourse"

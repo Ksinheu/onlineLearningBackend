@@ -37,7 +37,8 @@ class PaymentMethodController extends Controller
         return back()->with('success', 'Payment method created successfully!')->with('imagePath', $imagePath);
     }
        public function indexApi(){
-        $payment_method=Payment_method::all();
+        // $payment_method=Payment_method::all();
+         $payment_method = Payment_method::where('status', 'active')->get();
          // Only return sliders with 'active' status
     // $payment_method = Payment_method::where('status', 'active')->get();
         return response()->json([

@@ -31,7 +31,7 @@
 
     {{-- Table --}}
     <div class="card mt-4 mb-5">
-        <div class="card-body overview-boxes position-relative">
+        <div class="card-body ">
             @if ($contents->count())
                 <table class="table">
                     <thead>

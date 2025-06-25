@@ -11,36 +11,41 @@ use Illuminate\Http\Request;
 class ContentController extends Controller
 {
     public function index(Request $request)
-{
-    $search = $request->input('search');
-    $contents = Content::when($search, function ($query, $search) {
+    {
+        $search = $request->input('search');
+        $contents = Content::when($search, function ($query, $search) {
             return $query->where('title', 'like', '%' . $search . '%');
         })
-        ->latest()
-        ->paginate(5);
+            ->latest()
+            ->paginate(5);
 
-    $courses=Course::all();
-    $lessons=Lession::all();
-    $i = (request()->input('page', 1) - 1) * 5;
+        $courses = Course::all();
+        $lessons = Lession::all();
+        $i = (request()->input('page', 1) - 1) * 5;
 
-    return view('content.index', compact('contents', 'i','courses','lessons'));
-}
-public function getLessonsByCourse($courseId)
-{
-    $lessons = Lession::where('course_id', $courseId)->get();
-
-    if ($lessons->isEmpty()) {
-        return response()->json([
-            'message' => 'No lessons found for this course.'
-        ], 404);
+        return view('content.index', compact('contents', 'i', 'courses', 'lessons'));
     }
+    public function getLessonsByCourse($courseId)
+    {
+        $lessons = Lession::where('course_id', $courseId)->get();
 
-    return response()->json([
-        'message' => 'Lessons retrieved successfully!',
-        'lessons' => $lessons
-    ]);
-}
+        if ($lessons->isEmpty()) {
+            return response()->json([
+                'message' => 'No lessons found for this course.'
+            ], 404);
+        }
 
+        return response()->json([
+            'message' => 'Lessons retrieved successfully!',
+            'lessons' => $lessons
+        ]);
+    }
+    public function indexApi(){
+        $content=Content::all();
+        return response()->json([
+            'content'=>$content
+        ]);
+    }
     public function create()
     {
         $courses = Course::all();
@@ -50,15 +55,15 @@ public function getLessonsByCourse($courseId)
 
     public function store(Request $request)
     {
-       $request->validate([
-    'course_id' => 'required|exists:courses,id',
-    'lesson_id' => 'required|exists:lessions,id',
-    'session' => 'required|string',
-    'expect_result' => 'required|string',
-    'Lesson_content' => 'required|string',
-    'activity' => 'required|string',
-    'Evaluate' => 'required|string',
-]);
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'lesson_id' => 'required|exists:lessions,id',
+            'session' => 'required|string',
+            'expect_result' => 'required|string',
+            'Lesson_content' => 'required|string',
+            'activity' => 'required|string',
+            'Evaluate' => 'required|string',
+        ]);
 
 
         Content::create($request->all());

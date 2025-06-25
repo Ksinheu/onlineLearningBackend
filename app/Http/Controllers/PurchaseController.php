@@ -7,7 +7,6 @@ use App\Models\Customer;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Events\NewPaymentNotification;
 use Illuminate\Support\Facades\Http;
 
 class PurchaseController extends Controller
@@ -55,12 +54,20 @@ class PurchaseController extends Controller
         'payment_status' => $request->payment_status,
     ]);
     // event(new NewPaymentNotification($purchase)); 
-
+     // Load related models
+    $customer = Customer::find($request->customer_id);
+    $course = Course::find($request->course_id);
     //  Send Telegram Notification
     $token = '7656164245:AAHru3x35rIVFfkd_Xx5e7tT83weu1kWIDA';
     $chat_id = '-4849538103';
-    $text = "សាកល្បង" . now();
-
+    // $text = "សាកល្បង" . now();
+     // Format Telegram Message
+    $text = "<b>📢 មានការទូទាត់ថ្មី</b>\n";
+    $text .= "👤 ឈ្មោះអ្ន​កទូទាត់: <b>{$customer->username}</b>\n";
+    $text .= "📚 មុខវិជ្ជា: <b>{$course->course_name}</b>\n";
+    $text .= "🕐 ម៉ោង: " . now()->format('Y-m-d H:i') . "\n";
+    // $text .= "🖼️ រូបភាពមុខវិជ្ជា:\n";
+    // $text .= "http://localhost:8000/storage/{$course->imgCourse}";
     Http::get("https://api.telegram.org/bot{$token}/sendMessage", [
         'chat_id' => $chat_id,
         'text' => $text,
@@ -117,4 +124,21 @@ public function show(Purchase $payment)
 
         return redirect()->route('payment.index')->with('success', 'Payment deleted successfully!');
     }
+
+    public function getCompletedCourses(Request $request)
+{
+    $customerId = $request->query('customer_id'); // Get customer_id from query
+
+    $courses = Purchase::with('course')
+        ->where('customer_id', $customerId)
+        ->where('payment_status', 'completed')
+        ->get()
+        ->pluck('course') // Extract only course info
+        ->unique('id')     // Optional: prevent duplicate courses
+        ->values();        // Reindex array
+
+    return response()->json([
+        'courses' => $courses
+    ]);
+}
 }

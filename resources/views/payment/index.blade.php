@@ -71,7 +71,10 @@
                                         @endif
                                     </td>
                                     <td>{{ $payment->purchase_date }}</td>
-                                    <td><span class="badge bg-info">{{ ucfirst($payment->payment_status) }}</span></td>
+                                    {{-- <td><span class="badge bg-info">{{ ucfirst($payment->payment_status) }}</span></td> --}}
+                                    <td><span
+                                    class="p-2 badge {{ $payment->payment_status === 'completed' ? 'bg-success' : 'bg-secondary' }}">{{ ucfirst($payment->payment_status) }}</span>
+                            </td>
                                     <td>
                                         <a href="{{ route('payment.show', $payment->id) }}"
                                             class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></a>

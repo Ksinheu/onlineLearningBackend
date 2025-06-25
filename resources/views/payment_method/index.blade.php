@@ -34,7 +34,7 @@
                     data-bs-target="#uploadModal"><i class="fa-solid fa-plus"></i> បង្កើត</a>
 
                 <!-- Centered title -->
-                <h5 class="mb-0 text-primary flex-grow-1 text-center">Payment Method</h5>
+                <h5 class="mb-0 text-primary flex-grow-1 text-center">ប្រភេទធនាគារ</h5>
 
                 <!-- Optional placeholder to balance layout -->
                 <div style="width: 100px;"></div>
@@ -115,7 +115,7 @@
                             <td><img src="{{ Storage::url($payment_methods->QR_code) }}" alt="" width="50px"
                                     height="50px"></td>
                             <td>{{ $payment_methods->phone_number }}</td>
-                            <td><span class="badge {{ $payment_methods->status === 'active' ? 'bg-success' : 'bg-secondary' }}">{{ ucfirst($payment_methods->status) }}</span></td>
+                            <td><span class="p-2 badge {{ $payment_methods->status === 'active' ? 'bg-success' : 'bg-secondary' }}">{{ ucfirst($payment_methods->status) }}</span></td>
                             <td>
                                 <a href="{{ route('payment_method.show', $payment_methods->id) }}" class="btn btn-warning"
                                     data-bs-toggle="modal" data-bs-target="#showModel{{ $payment_methods->id }}"><i class="fa-solid fa-eye"></i></a>
