@@ -83,7 +83,7 @@
                             @else
                                 <li class="page-item">
                                     <a class="page-link"
-                                        href="{{ $content->previousPageUrl() }}{{ request()->has('search') ? '&search=' . request('search') : '' }}"
+                                        href="{{ $contents->previousPageUrl() }}{{ request()->has('search') ? '&search=' . request('search') : '' }}"
                                         rel="prev">«</a>
                                 </li>
                             @endif

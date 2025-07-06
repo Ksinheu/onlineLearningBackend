@@ -86,7 +86,7 @@
                                     </select>
                                 </div>
 
-                                <div class="text-center"><button type="submit" class="btn btn-success"><i
+                                <div class="text-center"><button type="submit" class="btn btn-primary"><i
                                             class="fa-solid fa-floppy-disk"></i> រក្យាទុក</button></div>
                             </form>
 
@@ -95,7 +95,7 @@
                 </div>
             </div>
             {{-- edit --}}
-
+        @if ($payment_method->count())
             <table class="table table-hover">
                 <thead>
                     <th>#</th>
@@ -107,9 +107,9 @@
                     <th>សកម្មភាព</th>
                 </thead>
                 <tbody>
-                    @foreach ($payment_method as $payment_methods)
+                    @foreach ($payment_method as $index => $payment_methods)
                         <tr>
-                            <td>{{ $payment_methods->id }}</td>
+                            <td>{{ $index + 1 }}</td>
                             <td>{{ $payment_methods->name_bank }}</td>
                             <td>{{ $payment_methods->number_bank }}</td>
                             <td><img src="{{ Storage::url($payment_methods->QR_code) }}" alt="" width="50px"
@@ -283,7 +283,9 @@
                     </nav>
                
         </div>
-        
+         @else
+            <div class="alert alert-warning">មិនមានទិន្នន័យទេ។</div>
+        @endif
     </div>
     
     <script>

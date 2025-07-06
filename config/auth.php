@@ -80,10 +80,7 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Customer::class,
         ],
-        // 'payments' => [
-        //     'driver' => 'eloquent',
-        //     'model' => App\Models\Purchase::class,
-        // ],
+        
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -117,7 +114,8 @@ return [
         'provider' => 'customers',
         'table' => 'password_resets',
         'expire' => 60,
-        ],
+        'throttle' => 60,
+    ],
     ],
 
     /*

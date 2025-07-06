@@ -75,11 +75,7 @@
                                     value="{{ old('title') }}" required>
                             </div>
 
-                            <!-- Lesson Content -->
-                            {{-- <div class="mb-3">
-                                <label for="content" class="form-label">មាតិកា:</label>
-                                <textarea name="content" id="content" class="form-control" rows="4" required>{{ old('content') }}</textarea>
-                            </div> --}}
+                           
 
                             <!-- Video Upload -->
                             <div class="mb-3">

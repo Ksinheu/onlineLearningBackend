@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\AuthApiData;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContentController;
@@ -14,6 +16,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubmissionController;
+use App\Http\Controllers\testMailController;
+use App\Models\Customer;
+use App\Models\Purchase;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,7 +37,25 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('auth.login');
 });
+// Show the form to request a password reset link
+Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.request');
 
+// Handle the form POST to send the reset link email
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.email');
+
+// Show "Reset Password" form (via token from email)
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.reset');
+
+// Handle actual password update submission
+Route::post('/reset-password', [NewPasswordController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.store');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -74,8 +99,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/payments', \App\Http\Livewire\AdminPaymentAlerts::class)->name('payments');
 });
 
-// Route::get('/auth/google', [LessionController::class, 'redirect'])->name('google.auth');
-// Route::get('/auth/google/callback', [LessionController::class, 'callback']);
 
-// Route::get('/test-api', [LessionController::class, 'testApi'])->name('test.api');
+
+// this is route for test mail 
+Route::get('/test-mail',[testMailController::class,'index'])->name('test.mail');
 

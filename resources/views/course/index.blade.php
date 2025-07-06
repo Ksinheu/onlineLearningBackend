@@ -139,7 +139,7 @@
                                             data-bs-toggle="modal" data-bs-target="#showModal{{ $courses->id}}"><i
                                                 class="fa-solid fa-eye"></i></a>
                                         <a href="{{ route('course.edit', $courses->id) }}" class="btn btn-info"
-                                            data-bs-toggle="modal" data-bs-target="#updateModal{{ $courses->id}}"><i class="fa-solid fa-pen"></i></a>
+                                            data-bs-toggle="modal" data-bs-target="#updateModal{{$courses->id}}"><i class="fa-solid fa-pen"></i></a>
                                         <form action="{{ route('course.destroy', $courses->id) }}" method="POST"
                                             style="display:inline-block;">
                                             @csrf
@@ -149,13 +149,11 @@
                                                     class="fa-solid fa-trash"></i></button>
                                         </form>
                                     </td>
+                                    
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    {{-- update --}} {{-- update --}}
+                                {{-- update --}} {{-- update --}}
                     <!-- Vertically centered scrollable modal -->
-                    <div class="modal fade" id="updateModal{{ $courses->id}}" tabindex="-1" aria-labelledby="uploadModalLabel"
+                    <div class="modal fade" id="updateModal{{$courses->id}}" tabindex="-1" aria-labelledby="uploadModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
                             <div class="modal-content">
@@ -166,7 +164,7 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ route('course.update', $courses->id) }}" method="POST"
+                                    <form action="{{ route('course.update',$courses->id) }}" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
@@ -239,9 +237,6 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-
-
-
                                 <div class="row no-gutters">
                                     <div class="col-md-4">
                                         @if ($courses->imgCourse)
@@ -271,6 +266,10 @@
                         </div>
                     </div>
                 </div>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    
                 <!-- Pagination with search query preserved -->
                     <nav class="position-relative border-0 shadow-none justify-content-end ">
                         <ul class="pagination ">

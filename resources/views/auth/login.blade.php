@@ -64,13 +64,12 @@
 </x-guest-layout> --}}
 @extends('layouts.guest')
 @section('content')
-
-<div class="sufee-login d-flex align-content-center flex-wrap">
+    <div class="sufee-login d-flex align-content-center flex-wrap">
         <div class="container">
             <div class="login-content ">
                 <div class="login-logo">
-                    <a href="index.html">
-                        <img class="align-content" src="{{asset('images/pcc-logo.png')}}" class="w-50" alt="">
+                    <a>
+                        <img class="align-content" src="{{ asset('images/pcc-logo.png') }}" class="w-50" alt="">
                     </a>
                 </div>
                 <div class="login-form shadow">
@@ -78,16 +77,19 @@
                         @csrf
                         <div class="form-group">
                             <label>អ៊ីមែល</label>
-                            <input type="email" class="form-control  @error('email') is-invalid @enderror" placeholder="Email" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                            <input type="email" class="form-control  @error('email') is-invalid @enderror"
+                                placeholder="Email" name="email" value="{{ old('email') }}" required autocomplete="email"
+                                autofocus>
                         </div>
                         <div class="form-group">
                             <label>លេខសម្ងាត់</label>
-                            <input type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password"  name="password" required autocomplete="current-password">
-                             @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                placeholder="Password" name="password" required autocomplete="current-password">
+                            @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                         {{-- <div class="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                             <label>

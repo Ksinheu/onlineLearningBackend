@@ -237,7 +237,9 @@ class AuthApiData extends Controller
 {
     $request->validate(['email' => 'required|email']);
 
-        $status = Password::sendResetLink($request->only('email'));
+         $status = Password::broker('customers')->sendResetLink(
+        $request->only('email')
+    );
 
         if ($status === Password::RESET_LINK_SENT) {
             return response()->json([

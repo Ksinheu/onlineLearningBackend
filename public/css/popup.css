@@ -1,0 +1,182 @@
+.web-popup,
+.web-popup .pp-bg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: transparent;
+    z-index: 10000000000;
+}
+.web-popup-active{
+    display: block;
+    /* backdrop-filter: blur(1px); */
+}
+body:has(.web-popup-active){
+    overflow: hidden;
+}
+.web-popup .pp-box{
+    position: fixed;
+    width: 90%;
+    max-width: 600px;
+    background: var(--sg-bglight);
+    overflow: hidden;
+    border-radius: 0.8rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    z-index: 5;
+    transition: opacity 0.1s ease-in-out;
+    opacity: 0;
+}
+.web-popup-active .pp-box{
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+.web-popup .pp-head{
+    height: 60px;
+}
+.web-popup .pp-head > .icon{
+    rotate: 134deg;
+    scale: 1;
+    width: 2.8rem;
+    height: 2.8rem;
+    min-width: 2.8rem;
+    min-height: 2.8rem;
+}
+.web-popup .pp-head > .icon svg{
+    width: 1.8rem;
+}
+.web-popup .pp-head .text .icon svg{
+    display: none;
+    width: 2rem;
+}
+.web-popup .pp-head .text p{
+    margin: 0rem 0.3rem;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+.web-popup .pp-error .pp-head .text .icon svg.error,
+.web-popup .pp-success .pp-head .text .icon svg.success,
+.web-popup .pp-warning .pp-head .text .icon svg.warning,
+.web-popup .pp-info .pp-head .text .icon svg.infor{
+    display: flex;
+}
+.web-popup .pp-head .text .icon svg.error path{
+    fill: var(--sg-maincolor-orangdark);
+    stroke: var(--sg-bglight);
+}
+.web-popup .pp-head .text .icon svg.success path{
+    fill: var(--sg-maincolor-greendark);
+    stroke: var(--sg-bglight);
+}
+.web-popup .pp-head .text .icon svg.warning path{
+    fill: var(--sg-main-yellowlight);
+    stroke: var(--sg-bglight);
+}
+.web-popup .pp-head .text .icon svg.infor path{
+    fill: var(--sg-maincolor-bluelight);
+    stroke: var(--sg-bglight);
+}
+.web-popup .pp-head .icon{
+    min-height: 2rem;
+    min-width: 2.8rem;
+}
+.web-popup .pp-head > .icon:hover{
+    cursor: pointer;
+    background: var(--sg-bgblack);
+}
+.web-popup blockquote{
+    padding: 0rem 1rem;
+    line-height: 1.6;
+    box-sizing: border-box;
+    border-left: 2px solid transparent;
+    border: none !important;
+}
+.web-popup .pp-error blockquote{
+    border-color: var(--sg-maincolor-orangdark);
+    color: var(--sg-maincolor-orangdark);
+}
+.web-popup .pp-success blockquote{
+    border-color: var(--sg-maincolor-greendark);
+    color: var(--sg-maincolor-greendark);
+}
+.web-popup .pp-warning blockquote{
+    border-color: var(--sg-main-yellowlight);
+    color: var(--sg-main-yellowlight);
+}
+.web-popup .pp-info blockquote{
+    border-color: var(--sg-maincolor-bluelight);
+    color: var(--sg-maincolor-bluelight);
+}
+.web-popup .pp-error .pp-head p::before {
+    content: 'មានបញ្ហាបានកើតឡើង! សូមពិនិត្យវិញម្ដងទៀត។'; /* Error: Something went wrong! */
+}
+
+.web-popup .pp-success .pp-head p::before {
+    content: 'អបអរសាទរ! សកម្មភាពបានជោគជ័យ។'; /* Success: Action completed */
+}
+
+.web-popup .pp-warning .pp-head p::before {
+    content: 'សូមប្រុងប្រយ័ត្ន! សូមពិនិត្យព័ត៌មានមុនបន្ត។'; /* Warning: Double-check before proceeding */
+}
+
+.web-popup .pp-info .pp-head p::before {
+    content: 'ព័ត៌មានសំខាន់: សូមអានព័ត៌មាននេះ។'; /* Info: Important information */
+}
+.web-popup .pp-foot{
+    border-top: 1px solid var(--sg-bgblack);
+    border: none;
+}
+.web-popup .pp-foot .ppf-box{
+    height: max-content;
+    padding: 1.2rem 0rem;
+}
+.web-popup .pp-foot .ppf-box > p{
+    font-size: 1rem;
+}
+.web-popup .pp-foot .btn{
+    min-width: 85px;
+    height: 2.5rem;
+    font-size: 0.9rem;
+    font-weight: 400;
+    padding: 0rem 0.4rem;
+    color: var(--bgcolor-Light);
+    box-sizing: border-box;
+    border-radius: 50rem;
+    margin-left: 0.5rem;
+    text-transform: uppercase;
+    border: 1px solid var(--color-border-00);
+    transition: all ease-in-out 0.3s;
+}
+.web-popup .pp-foot .btn:hover{
+    background: var(--bgbuttonHover) !important;
+}
+.web-popup .pp-foot .btn-uncancel{
+    display: none;
+}
+.web-popup .pp-foot .btn:active{
+    scale: 0.9;
+}
+.web-popup .pp-foot .btn:first-child{
+    background: transparent;
+    color: var(--bgbutton);
+    border: none;
+    transition: all ease-in-out 0.1s;
+}
+.web-popup .pp-foot .btn:first-child:hover{
+    background: var(--bgbuttonHover);
+    color: var(--bgcolor-Light);
+    border-color: var(--bgbuttonHover);
+}
+.web-popup .pp-bg{
+    z-index: 0;
+    background: var(--sg-color-def);
+    opacity: 0;
+}
+.web-popup-active .pp-bg{
+    opacity: 0.5;
+    display: block;
+    cursor: not-allowed;
+}

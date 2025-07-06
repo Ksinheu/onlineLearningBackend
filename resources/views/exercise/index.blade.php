@@ -43,7 +43,7 @@
             <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title text-center" id="uploadModalLabel">បញ្ចូលលំហាត់</h5>
+                        <h5 class="modal-title text-center text-primary" id="uploadModalLabel">បញ្ចូលលំហាត់</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -51,9 +51,9 @@
                             @csrf
                             {{-- Course Selection --}}
                             <div class="mb-3">
-                                <label for="lesson" class="form-label">lesson:</label>
+                                <label for="lesson" class="form-label">មេរៀន:</label>
                                 <select name="lesson_id" class="form-control" required>
-                                    <option value="" disabled selected>Select a lesson</option>
+                                      <option value="">-- ជ្រើសរើសមុខវិជ្ជា --</option>
                                     @foreach ($lesson as $lessons)
                                         <option value="{{ $lessons->id }}"
                                             {{ old('lesson_id') == $lessons->id ? 'selected' : '' }}>
@@ -65,13 +65,13 @@
 
                             {{-- Lesson Title --}}
                             <div class="mb-3">
-                                <label for="exercise_element" class="form-label">Exercise Element</label>
+                                <label for="exercise_element" class="form-label">លំហាត់:</label>
                                 <textarea name="exercise_element" class="form-control" rows="3" required></textarea>
                             </div>
 
                             {{-- Lesson Content --}}
                             <div class="mb-3">
-                                <label for="images" class="form-label">Upload Images (multiple allowed)</label>
+                                <label for="images" class="form-label">រូបភាពលំហាត់ (អាចបញ្ចូលរូបភាពបានច្រើន):</label>
                                 <input type="file" name="images[]" class="form-control" multiple>
                             </div>
 
@@ -139,7 +139,7 @@
                                     <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title text-center" id="uploadModalLabel">កែប្រែលំហាត់</h5>
+                                                <h5 class="modal-title text-center text-primary" id="uploadModalLabel">កែប្រែលំហាត់</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
@@ -151,7 +151,7 @@
 
                                                     <!-- Lesson ID -->
                                                     <div class="mb-3">
-                                                        <label for="lesson_id" class="form-label">Lesson</label>
+                                                        <label for="lesson_id" class="form-label">មេរៀន:</label>
                                                         <select name="lesson_id" id="lesson_id" class="form-control">
                                                             @foreach ($lesson as $lessions)
                                                                 <option value="{{ $lessions->id }}"
@@ -167,8 +167,7 @@
 
                                                     <!-- Exercise Element -->
                                                     <div class="mb-3">
-                                                        <label for="exercise_element" class="form-label">Exercise
-                                                            Element</label>
+                                                        <label for="exercise_element" class="form-label">លំហាត់:</label>
                                                         <input type="text" name="exercise_element"
                                                             id="exercise_element" class="form-control"
                                                             value="{{ old('exercise_element', $ex->exercise_element) }}">
@@ -179,7 +178,7 @@
 
                                                     <!-- Existing Images -->
                                                     <div class="mb-3">
-                                                        <label class="form-label">Current Images:</label><br>
+                                                        <label class="form-label">រូបភាព:</label><br>
                                                         @foreach ($ex->exerciseImage as $img)
                                                             <img src="{{ asset('storage/' . $img->image_path) }}"
                                                                 alt="Exercise Image" width="100" class="me-2 mb-2">
@@ -188,7 +187,7 @@
 
                                                     <!-- Upload New Images -->
                                                     <div class="mb-3">
-                                                        <label for="images" class="form-label">Add More Images</label>
+                                                        <label for="images" class="form-label">បញ្ចូលរូបភាព</label>
                                                         <input type="file" name="images[]" multiple
                                                             class="form-control">
                                                         @error('images.*')
@@ -197,7 +196,9 @@
                                                     </div>
 
                                                     <!-- Submit Button -->
-                                                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-pen"></i> កែប្រែ</button>
+                                                    <div class="mb-3 text-center">
+                                                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-pen"></i> កែប្រែ</button>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>

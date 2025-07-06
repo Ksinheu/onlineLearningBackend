@@ -53,12 +53,13 @@
                             <form action="{{ route('news.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3">
+                                    <label for="image">រូបភាព</label>
                                     <input type="file" class="form-control" name="imageNews" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="status">Status </label>
+                                    <label for="status">ស្ថានភាព </label>
                                     <select name="status" id="status" class="form-select" required>
-                                        <option value="">-- Select Status --</option>
+                                        <option value="">-- សូមជ្រើសរើសស្ថានភាព --</option>
                                         <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active
                                         </option>
                                         <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending
@@ -72,7 +73,7 @@
                 </div>
             </div>
             {{-- edit --}}
-
+        @if ($news->count())
             <table class="table table-hover">
                 <thead>
                     <th>#</th>
@@ -81,9 +82,9 @@
                     <th>សកម្មភាព</th>
                 </thead>
                 <tbody>
-                    @foreach ($news as $new)
+                    @foreach ($news as $index=> $new)
                         <tr>
-                            <td>{{ $new->id }}</td>
+                            <td>{{ $index+1 }}</td>
                             <td><img src="{{ Storage::url($new->imageNews) }}" alt="" width="50px" height="50px">
                             </td>
                             <td><span
@@ -131,7 +132,7 @@
                                                 {{-- <small class="text-muted">Leave blank if you don't want to change the QR code.</small> --}}
                                             </div>
                                             <div class="mb-3">
-                                                <label for="status" class="form-label">Status</label>
+                                                <label for="status" class="form-label">ស្ថានភាព</label>
                                                 <select name="status" id="status" class="form-select" required>
                                                     <option value="">-- សូមជ្រើសរើសស្ថានភាព --</option>
                                                     <option value="active"
@@ -172,7 +173,9 @@
                     @endforeach
                 </tbody>
             </table>
-
+         @else
+            <div class="alert alert-warning">មិនមានទិន្នន័យទេ។</div>
+        @endif
 <!-- Pagination with search query preserved -->
                     <nav class="position-relative border-0 shadow-none justify-content-end ">
                         <ul class="pagination ">

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthApiData;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\LessionController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PaymentMethodController;
@@ -37,15 +38,20 @@ Route::get('/payment_method',[PaymentMethodController::class,'indexApi']);
 Route::post('/comments',[CommentController::class,'store']);
 Route::get('/content',[ContentController::class,'indexApi']);
 Route::post('/purchases/{id}/approve', [PurchaseController::class, 'approve']);
-Route::post('/reset-password', [AuthApiData::class, 'resetPassword']);
-Route::post('/forgot-password', [AuthApiData::class, 'forgotPassword']);
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetCode']);
+Route::post('/otp-login', [ForgotPasswordController::class, 'loginWithOtp']);
 
+Route::post('/send-email', function (Request $request) {
+    $validated = $request->validate([
+        'to' => 'required|email',
+        'subject' => 'required|string',
+        'message' => 'required|string',
+    ]);
 
-Route::get('/test-mail', function () {
-    Mail::raw('This is a test email from Laravel.', function ($message) {
-        $message->to('youremail@example.com')
-                ->subject('Test Email');
+    Mail::raw($validated['message'], function ($msg) use ($validated) {
+        $msg->to($validated['to'])
+            ->subject($validated['subject']);
     });
 
-    return 'Mail sent!';
+    return response()->json(['status' => 'Email sent successfully']);
 });

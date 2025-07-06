@@ -62,7 +62,6 @@
                                     <label for="status">ស្ថានភាព </label>
                                     <select name="status" id="status" class="form-select" required>
                                         <option value="">-- សូមជ្រើសរើសស្ថានភាព --</option>
-                                        <option value="">-- Select Status --</option>
                                         <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active
                                         </option>
                                         <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending
@@ -76,6 +75,8 @@
                     </div>
                 </div>
             </div>
+        @if ($sliders->count())
+
             <table class="table table-hover">
                 <thead>
                     <th>#</th>
@@ -84,9 +85,9 @@
                     <th>សកម្មភាព</th>
                 </thead>
                 <tbody>
-                    @foreach ($sliders as $slider)
+                    @foreach ($sliders as $index => $slider)
                         <tr>
-                            <td>{{ $slider->id }}</td>
+                            <td>{{ $index+1 }}</td>
                             <td><img src="{{ Storage::url($slider->image) }}" alt="" width="50px" height="50px">
                             </td>
                             <td><span
@@ -172,6 +173,10 @@
                     @endforeach
                 </tbody>
             </table>
+         @else
+                    <div class="alert alert-warning">មិនមានទិន្នន័យទេ។</div>
+            @endif
+            
             <!-- Pagination with search query preserved -->
                     <nav class="position-relative border-0 shadow-none justify-content-end ">
                         <ul class="pagination ">

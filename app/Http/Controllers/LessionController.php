@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Lession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class LessionController extends Controller
 {
@@ -67,7 +68,8 @@ class LessionController extends Controller
         $course=Course::all();
         return view('lession.create',compact('course'));
     }
-   public function store(Request $request)
+  
+  public function store(Request $request)
 {
     $validated = $request->validate([
         'course_id' => 'required|exists:courses,id',
@@ -87,45 +89,74 @@ class LessionController extends Controller
 
     return redirect()->route('lession.index')->with('success', 'Video uploaded successfully!');
 }
+public function edit($id){
+        $lession=Lession::findOrFail($id);
+        $course=Course::all();
+        return view('lession.edit',compact('lession','course'));
+    }
+public function update(Request $request, $id)
+{
+    $lession = Lession::findOrFail($id);
+
+    $request->validate([
+        'course_id' => 'sometimes|exists:courses,id',
+        'title' => 'sometimes|string|max:255',
+        'video' => 'sometimes|file|mimes:mp4,mov,avi,wmv|max:204800',
+    ]);
+
+    if ($request->hasFile('video')) {
+        // Delete old video if needed
+        if ($lession->video_url && Storage::disk('public')->exists($lession->video_url)) {
+            Storage::disk('public')->delete($lession->video_url);
+        }
+
+        $path = $request->file('video')->store('videos', 'public');
+        $lession->video_url = $path;
+    }
+
+    if ($request->has('title')) $lession->title = $request->title;
+    if ($request->has('course_id')) $lession->course_id = $request->course_id;
+
+    $lession->save();
+
+    return redirect()->route('lession.index')->with('success','Lession updated successfully!');
+}
+
 
     public function show($id){
          $lession=Lession::findOrFail($id);
          return view('lession.show', compact('lession'));
     }
-    public function edit($id){
-        $lession=Lession::findOrFail($id);
-        $course=Course::all();
-        return view('lession.edit',compact('lession','course'));
-    }
-    public function update(Request $request, $id)
-{
-    $validated = $request->validate([
-        'course_id' => 'required|exists:courses,id',
-        'title' => 'required|string|max:255',
-        'video_url' => 'nullable|file|mimes:mp4,mov,avi,flv|max:102400', // optional video update
-    ]);
+    
+//     public function update(Request $request, $id)
+// {
+//     $validated = $request->validate([
+//         'course_id' => 'required|exists:courses,id',
+//         'title' => 'required|string|max:255',
+//         'video_url' => 'nullable|file|mimes:mp4,mov,avi,flv|max:102400', // optional video update
+//     ]);
 
-    $lesson = Lession::findOrFail($id);
+//     $lesson = Lession::findOrFail($id);
 
-    // Handle new video upload if present
-    if ($request->hasFile('video_url')) {
-        // Optionally delete old video
-        if ($lesson->video_url && Storage::disk('public')->exists($lesson->video_url)) {
-            Storage::disk('public')->delete($lesson->video_url);
-        }
+//     // Handle new video upload if present
+//     if ($request->hasFile('video_url')) {
+//         // Optionally delete old video
+//         if ($lesson->video_url && Storage::disk('public')->exists($lesson->video_url)) {
+//             Storage::disk('public')->delete($lesson->video_url);
+//         }
 
-        // Upload new video
-        $path = $request->file('video_url')->store('videos', 'public');
-        $lesson->video_url = $path;
-    }
+//         // Upload new video
+//         $path = $request->file('video_url')->store('videos', 'public');
+//         $lesson->video_url = $path;
+//     }
 
-    // Update other fields
-    $lesson->course_id = $validated['course_id'];
-    $lesson->title = $validated['title'];
-    $lesson->save();
+//     // Update other fields
+//     $lesson->course_id = $validated['course_id'];
+//     $lesson->title = $validated['title'];
+//     $lesson->save();
 
-    return redirect()->route('lession.index')->with('success', 'Lesson updated successfully!');
-}
+//     return redirect()->route('lession.index')->with('success', 'Lesson updated successfully!');
+// }
 
     public function destroy($id){
         $lession=Lession::findOrFail($id);
