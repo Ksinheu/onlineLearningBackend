@@ -69,7 +69,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($customers as $customer)
+                        @foreach($latestCustomers as $customer)
                         <tr>
                             <td>{{ $customer->id }}</td>
                             <td>{{ $customer->username }}</td>
@@ -82,9 +82,47 @@
                     </tbody>
                 </table>
             </div>
-            <div class="button">
-                <a href="#">See All</a>
-            </div>
+             <!-- Pagination with search query preserved -->
+            <nav class="position-relative border-0 shadow-none justify-content-end ">
+                <ul class="pagination ">
+                    {{-- Previous Page Link --}}
+                    @if ($latestCustomers->onFirstPage())
+                        <li class="page-item disabled"><span class="page-link bg-light text-muted">«</span></li>
+                    @else
+                        <li class="page-item">
+                            <a class="page-link"
+                                href="{{ $latestCustomers->previousPageUrl() }}{{ request()->has('search') ? '&search=' . request('search') : '' }}"
+                                rel="prev">«</a>
+                        </li>
+                    @endif
+
+                    {{-- Pagination Elements --}}
+                    @foreach ($latestCustomers->links()->elements[0] as $page => $url)
+                        @if ($page == $latestCustomers->currentPage())
+                            <li class="page-item active"><span class="page-link">{{ $page }}</span>
+                            </li>
+                        @else
+                            <li class="page-item">
+                                <a class="page-link bg-light text-dark"
+                                    href="{{ $url }}{{ request()->has('search') ? '&search=' . request('search') : '' }}">{{ $page }}</a>
+                            </li>
+                        @endif
+                    @endforeach
+
+                    {{-- Next Page Link --}}
+                    @if ($latestCustomers->hasMorePages())
+                        <li class="page-item">
+                            <a class="page-link bg-light text-dark"
+                                href="{{ $latestCustomers->nextPageUrl() }}{{ request()->has('search') ? '&search=' . request('search') : '' }}"
+                                rel="next">»</a>
+                        </li>
+                    @else
+                        <li class="page-item disabled">
+                            <span class="page-link bg-light text-muted">»</span>
+                        </li>
+                    @endif
+                </ul>
+            </nav>
         </div>
         <div class="top-sales box">
             <div class="title">ការទូទាត់</div>

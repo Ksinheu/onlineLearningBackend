@@ -127,36 +127,6 @@ public function update(Request $request, $id)
          $lession=Lession::findOrFail($id);
          return view('lession.show', compact('lession'));
     }
-    
-//     public function update(Request $request, $id)
-// {
-//     $validated = $request->validate([
-//         'course_id' => 'required|exists:courses,id',
-//         'title' => 'required|string|max:255',
-//         'video_url' => 'nullable|file|mimes:mp4,mov,avi,flv|max:102400', // optional video update
-//     ]);
-
-//     $lesson = Lession::findOrFail($id);
-
-//     // Handle new video upload if present
-//     if ($request->hasFile('video_url')) {
-//         // Optionally delete old video
-//         if ($lesson->video_url && Storage::disk('public')->exists($lesson->video_url)) {
-//             Storage::disk('public')->delete($lesson->video_url);
-//         }
-
-//         // Upload new video
-//         $path = $request->file('video_url')->store('videos', 'public');
-//         $lesson->video_url = $path;
-//     }
-
-//     // Update other fields
-//     $lesson->course_id = $validated['course_id'];
-//     $lesson->title = $validated['title'];
-//     $lesson->save();
-
-//     return redirect()->route('lession.index')->with('success', 'Lesson updated successfully!');
-// }
 
     public function destroy($id){
         $lession=Lession::findOrFail($id);

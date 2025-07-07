@@ -75,7 +75,7 @@
                                     value="{{ old('title') }}" required>
                             </div>
 
-                           
+
 
                             <!-- Video Upload -->
                             <div class="mb-3">
@@ -108,7 +108,7 @@
                                 <th>ចំណងជើង</th>
                                 <th>មុខវិជ្ជា</th>
                                 {{-- <th>ព័ត៌មានបន្ថែម</th> --}}
-                                <th>វីដេអូ</th>
+                                {{-- <th>វីដេអូ</th> --}}
                                 <th>សកម្មភាព</th>
                             </tr>
                         </thead>
@@ -119,18 +119,19 @@
                                     <td>{{ $lesson->title }}</td>
                                     <td>{{ $course->find($lesson->course_id)->course_name ?? 'N/A' }}</td>
                                     {{-- <td>{{ Str::limit($lesson->content, 50) }}</td> --}}
-                                    <td>
+                                    {{-- <td>
                                         <video controls width="100px">
                                             <source src="{{ asset('storage/' . $lesson->video_url) }}" type="video/mp4">
                                             Your browser does not support the video tag.
                                         </video>
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         <a href="{{ route('lession.show', $lesson->id) }}" class="btn btn-warning"
-                                            data-bs-toggle="modal" data-bs-target="#showModal{{$lesson->id}}"><i
+                                            data-bs-toggle="modal" data-bs-target="#showModal{{ $lesson->id }}"><i
                                                 class="fa-solid fa-eye"></i></a>
                                         <a href="{{ route('lession.edit', $lesson->id) }}" class="btn btn-info"
-                                            data-bs-toggle="modal" data-bs-target="#updateModal{{$lesson->id}}"><i class="fa-solid fa-pen"></i></a>
+                                            data-bs-toggle="modal" data-bs-target="#updateModal{{ $lesson->id }}"><i
+                                                class="fa-solid fa-pen"></i></a>
                                         <form action="{{ route('lession.destroy', $lesson->id) }}" method="POST"
                                             style="display:inline-block;">
                                             @csrf
@@ -144,7 +145,7 @@
                                 </tr>
                                 {{-- update --}}
                                 <!-- Vertically centered scrollable modal -->
-                                <div class="modal fade" id="updateModal{{$lesson->id}}" tabindex="-1"
+                                <div class="modal fade" id="updateModal{{ $lesson->id }}" tabindex="-1"
                                     aria-labelledby="uploadModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
                                         <div class="modal-content">
@@ -165,9 +166,10 @@
                                                         <select name="course_id" class="form-control" required>
                                                             <option value="" disabled selected>ជ្រើសរើសមុខវិជ្ជា
                                                             </option>
+                                                        
                                                             @foreach ($course as $courses)
                                                                 <option value="{{ $courses->id }}"
-                                                                    {{ $courses->course_id == $courses->id ? 'selected' : '' }}>
+                                                                    {{ $courses->id == $lesson->course_id ? 'selected' : '' }}>
                                                                     {{ $courses->course_name }}
                                                                 </option>
                                                             @endforeach
@@ -198,7 +200,8 @@
 
                                                     {{-- Submit Button --}}
                                                     <div class="text-center">
-                                                        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-pen"></i> កែប្រែ</button>
+                                                        <button class="btn btn-primary" type="submit"><i
+                                                                class="fa-solid fa-pen"></i> កែប្រែ</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -208,8 +211,8 @@
                                 {{-- update end --}}
                                 {{-- show --}}
                                 <!-- Vertically centered scrollable modal -->
-                                <div class="modal fade" id="showModal{{$lesson->id}}" tabindex="-1" aria-labelledby="uploadModalLabel"
-                                    aria-hidden="true">
+                                <div class="modal fade" id="showModal{{ $lesson->id }}" tabindex="-1"
+                                    aria-labelledby="uploadModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -220,7 +223,8 @@
                                             </div>
                                             <div class="modal-body">
                                                 <h1>{{ $lesson->title }}</h1>
-                                                <p><strong>Course:</strong> {{  $course->find($lesson->course_id)->course_name ?? 'N/A' }}</p>
+                                                <p><strong>Course:</strong>
+                                                    {{ $course->find($lesson->course_id)->course_name ?? 'N/A' }}</p>
                                                 {{-- <p><strong>Content:</strong> {{ $lesson->content }}</p> --}}
                                                 <h3>Video</h3>
                                                 <video controls>

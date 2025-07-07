@@ -64,11 +64,21 @@ class ExerciseController extends Controller
      }
  
      // ✅ Show single exercise with images
-     public function show($id)
-     {
-         $exercise = Exercise::with('exerciseImage')->findOrFail($id);
-         return response()->json($exercise);
-     }
+    //  public function show($id)
+    //  {
+    //      $exercise = Exercise::with('exerciseImage')->findOrFail($id);
+    //      return response()->json($exercise);
+    //  }
+    //  public function showApi()
+    //  {
+    //      $exercise = Exercise::all();
+    //      return response()->json($exercise);
+    //  }
+    public function showApi($id)
+{
+    $exercise = Exercise::where('lesson_id', $id)->get();
+    return response()->json(['exercise' => $exercise]);
+}
 public function edit($id){
     $exercise = Exercise::findOrFail($id);
     $lession=Lession::all();

@@ -33,8 +33,9 @@
                             <th>វគ្គសិក្សា</th>
                             <th>អតិថិជន</th>
                             <th>មតិយោបល់</th>
-                            <th>ស្ថានភាព</th>
+                            
                             <th>កាលបរិច្ឆេទ</th>
+                            <th>ស្ថានភាព</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,14 +45,15 @@
                                 <td>{{ $comment->course->course_name ?? 'N/A' }}</td>
                                 <td>{{ $comment->customer->username ?? 'N/A' }}</td>
                                 <td>{{ Str::limit($comment->comment, 50) }}</td>
+                                
+                                <td>{{ $comment->created_at->format('d/m/Y H:i') }}</td>
                                 <td>
                                     @if($comment->read_status == 'pending')
-                                        <span class="badge bg-warning p-2">Pending</span>
+                                        <span class="badge bg-danger p-2">New</span>
                                     @else
                                         <span class="badge bg-success p-2">Active</span>
                                     @endif
                                 </td>
-                                <td>{{ $comment->created_at->format('d/m/Y H:i') }}</td>
                             </tr>
                         @endforeach
                     </tbody>

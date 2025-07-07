@@ -20,23 +20,36 @@ use Illuminate\Support\Carbon;
 class AuthApiData extends Controller
 {
     public function index()
-    {
-        $customers = Customer::all();
-        $today = Carbon::today();
-        $count = Customer::whereDate('created_at', $today)->count();
-        $countAll = Customer::all()->count();
-        $completedPurchases = Purchase::where('payment_status', 'completed')->get();
+{
+    $customers = Customer::all();
+    $today = Carbon::today();
 
-        // Sum the prices of related courses
-        $totalIncome = $completedPurchases->sum(function ($purchase) {
-            return $purchase->course->price ?? 0; // Avoid error if course is null
-        });
-        // Count students who completed payment
-        $paidStudentCount = Purchase::where('payment_status', 'completed')
-            ->distinct('customer_id')
-            ->count('customer_id');
-        return view('dashboard', compact('customers', 'count', 'countAll', 'totalIncome', 'paidStudentCount'));
-    }
+    $count = Customer::whereDate('created_at', $today)->count();
+    $countAll = $customers->count();
+
+    $latestCustomers = Customer::orderBy('created_at', 'desc')->paginate(5); // ✅ returns LengthAwarePaginator
+
+
+    $completedPurchases = Purchase::where('payment_status', 'completed')->get();
+
+    $totalIncome = $completedPurchases->sum(function ($purchase) {
+        return $purchase->course->price ?? 0;
+    });
+
+    $paidStudentCount = Purchase::where('payment_status', 'completed')
+        ->distinct('customer_id')
+        ->count('customer_id');
+
+    return view('dashboard', compact(
+        'customers',
+        'count',
+        'countAll',
+        'totalIncome',
+        'paidStudentCount',
+        'latestCustomers'
+    ));
+}
+
     public function indexApi()
     {
         $customers = Customer::all();

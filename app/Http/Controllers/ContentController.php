@@ -25,23 +25,24 @@ class ContentController extends Controller
 
         return view('content.index', compact('contents', 'i', 'courses', 'lessons'));
     }
-    public function getLessonsByCourse($courseId)
-    {
-        $lessons = Lession::where('course_id', $courseId)->get();
+    // public function getLessonsByCourse($courseId)
+    // {
+    //     $lessons = Lession::where('course_id', $courseId)->get();
 
-        if ($lessons->isEmpty()) {
-            return response()->json([
-                'message' => 'No lessons found for this course.'
-            ], 404);
-        }
+    //     if ($lessons->isEmpty()) {
+    //         return response()->json([
+    //             'message' => 'No lessons found for this course.'
+    //         ], 404);
+    //     }
 
-        return response()->json([
-            'message' => 'Lessons retrieved successfully!',
-            'lessons' => $lessons
-        ]);
-    }
+    //     return response()->json([
+    //         'message' => 'Lessons retrieved successfully!',
+    //         'lessons' => $lessons
+    //     ]);
+    // }
     public function indexApi(){
         $content=Content::all();
+        //  $content = Content::where('lesson_id', $id)->get();
         return response()->json([
             'content'=>$content
         ]);

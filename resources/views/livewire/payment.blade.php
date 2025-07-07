@@ -1,6 +1,6 @@
 
 <div wire:poll.5s="getNewPurchase">
-    @if (!empty($newPayments))
+    @if (!empty($latestPayments))
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -12,7 +12,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($newPayments as $payment)
+                @foreach ($latestPayments as $payment)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ Str::limit($payment->customer->username, 10) }}</td>
@@ -79,7 +79,6 @@
             <div class="pp-bg"></div>
         </div>
     @endif
-
 
 
 </div>

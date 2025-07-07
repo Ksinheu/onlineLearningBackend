@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthApiData;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\LessionController;
 use App\Http\Controllers\NewsController;
@@ -36,8 +37,9 @@ Route::get('/customer/completed-courses', [PurchaseController::class, 'getComple
 // payment method
 Route::get('/payment_method',[PaymentMethodController::class,'indexApi']);
 Route::post('/comments',[CommentController::class,'store']);
-Route::get('/content',[ContentController::class,'indexApi']);
-Route::post('/purchases/{id}/approve', [PurchaseController::class, 'approve']);
+Route::get('/contents',[ContentController::class,'indexApi']);
+Route::get('/exercise/{id}',[ExerciseController::class,'showApi']);
+// Route::post('/purchases/{id}/approve', [PurchaseController::class, 'approve']);
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetCode']);
 Route::post('/otp-login', [ForgotPasswordController::class, 'loginWithOtp']);
 

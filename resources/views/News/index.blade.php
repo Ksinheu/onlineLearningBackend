@@ -88,7 +88,7 @@
                             <td><img src="{{ Storage::url($new->imageNews) }}" alt="" width="50px" height="50px">
                             </td>
                             <td><span
-                                    class="p-2 badge {{ $new->status === 'active' ? 'bg-success' : 'bg-secondary' }}">{{ ucfirst($new->status) }}</span>
+                                    class="p-2 badge {{ $new->status === 'active' ? 'bg-success' : 'bg-warning' }}">{{ ucfirst($new->status) }}</span>
                             </td>
                             <td>
                                 <a href="{{ route('news.show', $new->id) }}" class="btn btn-warning" data-bs-toggle="modal"
@@ -109,7 +109,7 @@
                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="uploadModalLabel">កែប្រែព័ត៌មានថ្មីៗ</h5>
+                                        <h5 class="modal-title text-primary" id="uploadModalLabel">កែប្រែព័ត៌មានថ្មីៗ</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
@@ -156,7 +156,7 @@
                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="uploadModalLabel">មើលរូបព័ត៌មានថ្មីៗ</h5>
+                                        <h5 class="modal-title text-primary" id="uploadModalLabel">មើលរូបព័ត៌មានថ្មីៗ</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>

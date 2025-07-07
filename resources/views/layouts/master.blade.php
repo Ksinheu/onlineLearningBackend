@@ -24,7 +24,7 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-2 sidebar position-fixed">
+            <div class=" sidebar position-fixed" style="width: 240px; height: 100vh;">
                 <div class="logo-details">
                     <img src="{{ asset('images/pcc-logo.png') }}" alt="">
                     {{-- <span class="logo_name">PCC</span> --}}
@@ -185,9 +185,15 @@
                 </nav>
                 @yield('content')
             </div>
+
         </div>
+        <footer  class="footer bg-white border-top text-center text-muted small py-2" style="margin-left: 16.666667%;">
+  <div class="container">
+    <span>&copy; 2025 Online Learning System | Version 1.0.0</span>
+  </div>
+</footer>
     </div>
-    <livewire:payment />
+    {{-- <livewire:payment /> --}}
     <script src="{{asset('js/bootstrap.js')}}"></script>
     {{-- @livewire('admin-payment-alerts') --}}
     @livewireScripts
