@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Lession;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -120,13 +121,33 @@ public function show($id){
     return redirect()->route('course.index')->with('success', 'Course updated successfully!');
 }
 
-    public function destroy($id){
-        $course=Course::findOrFail($id);
-        // Delete the image file
-        if ($course->imgCourse) {
-            Storage::disk('public')->delete($course->imgCourse);
-        }
-        $course->delete();
-        return redirect()->route('course.index')->with('success','Course deleted successfully!');
+public function destroy($id)
+{
+    $course = Course::findOrFail($id);
+
+    // Delete image from storage (only if exists)
+    if ($course->imgCourse && Storage::disk('public')->exists($course->imgCourse)) {
+        Storage::disk('public')->delete($course->imgCourse);
     }
+
+    // Delete the course from database
+    $course->delete();
+
+    return redirect()->route('course.index')->with('success', 'Course deleted successfully!');
+}
+public function lessons(Request $request, $courseId)
+{
+    $search = $request->input('search');
+
+    $course = Course::findOrFail($courseId);
+
+    $lessons = $course->lession()
+        ->when($search, function ($query, $search) {
+            return $query->where('title', 'like', '%' . $search . '%');
+        })
+        ->latest()
+        ->paginate(5);
+
+    return view('course.lessons', compact('course', 'lessons'));
+}
 }

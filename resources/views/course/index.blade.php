@@ -119,7 +119,7 @@
                         </thead>
                         <tbody>
                             @foreach ($course as $index => $courses)
-                                <tr>
+                                <tr  class="clickable-row" data-href="{{ route('courses.lessons', $courses->id) }}">
                                     <td>{{ $i + $index + 1 }}</td>
                                     <td>{{ $user->find($courses->user_id)->name ?? 'N/A' }}</td>
                                     <td>{{ $courses->course_name }}</td>
@@ -136,10 +136,11 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('course.show', $courses->id) }}" class="btn btn-warning"
-                                            data-bs-toggle="modal" data-bs-target="#showModal{{ $courses->id}}"><i
+                                            data-bs-toggle="modal" data-bs-target="#showModal{{ $courses->id }}"><i
                                                 class="fa-solid fa-eye"></i></a>
                                         <a href="{{ route('course.edit', $courses->id) }}" class="btn btn-info"
-                                            data-bs-toggle="modal" data-bs-target="#updateModal{{$courses->id}}"><i class="fa-solid fa-pen"></i></a>
+                                            data-bs-toggle="modal" data-bs-target="#updateModal{{ $courses->id }}"><i
+                                                class="fa-solid fa-pen"></i></a>
                                         <form action="{{ route('course.destroy', $courses->id) }}" method="POST"
                                             style="display:inline-block;">
                                             @csrf
@@ -152,125 +153,132 @@
                                     
                                 </tr>
                                 {{-- update --}} {{-- update --}}
-                    <!-- Vertically centered scrollable modal -->
-                    <div class="modal fade" id="updateModal{{$courses->id}}" tabindex="-1" aria-labelledby="uploadModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title text-center text-primary" id="uploadModalLabel">
-                                        កែប្រែមុខវិជ្ជា</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="{{ route('course.update',$courses->id) }}" method="POST"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="mb-3">
-                                            <label for="user" class="form-label">ឈ្មោះអ្នកប្រើ:</label>
-                                            <select name="user_id" class="form-control" required>
-                                                @foreach ($user as $users)
-                                                    <option value="{{ $users->id }}"
-                                                        {{ $courses->user_id == $users->id ? 'selected' : '' }}>
-                                                        {{ $users->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="course_name" class="form-label">ឈ្មោះមុខវិជ្ជា:</label>
-                                            <input type="text" name="course_name" id="course_name"
-                                                class="form-control" value="{{ $courses->course_name }}" required>
-                                        </div>
-                                        <div class="mb-3">
+                                <!-- Vertically centered scrollable modal -->
+                                <div class="modal fade" id="updateModal{{ $courses->id }}" tabindex="-1"
+                                    aria-labelledby="uploadModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-center text-primary" id="uploadModalLabel">
+                                                    កែប្រែមុខវិជ្ជា</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ route('course.update', $courses->id) }}" method="POST"
+                                                    enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="mb-3">
+                                                        <label for="user" class="form-label">ឈ្មោះអ្នកប្រើ:</label>
+                                                        <select name="user_id" class="form-control" required>
+                                                            @foreach ($user as $users)
+                                                                <option value="{{ $users->id }}"
+                                                                    {{ $courses->user_id == $users->id ? 'selected' : '' }}>
+                                                                    {{ $users->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="course_name"
+                                                            class="form-label">ឈ្មោះមុខវិជ្ជា:</label>
+                                                        <input type="text" name="course_name" id="course_name"
+                                                            class="form-control" value="{{ $courses->course_name }}"
+                                                            required>
+                                                    </div>
+                                                    <div class="mb-3">
 
-                                            <label for="imgCourse">រូបភាព(optional):</label>
-                                            @if ($courses->imgCourse)
-                                                <div class="mb-2">
-                                                    <img src="{{ asset('storage/' . $courses->imgCourse) }}"
-                                                        alt="Current QR Code" style="max-width: 150px;">
+                                                        <label for="imgCourse">រូបភាព(optional):</label>
+                                                        @if ($courses->imgCourse)
+                                                            <div class="mb-2">
+                                                                <img src="{{ asset('storage/' . $courses->imgCourse) }}"
+                                                                    alt="Current QR Code" style="max-width: 150px;">
+                                                            </div>
+                                                        @endif
+                                                        <input type="file" name="imgCourse" class="form-control"
+                                                            id="imgCourse" accept="image/*">
+
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="description" class="form-label">ពិពណ៌នា:</label>
+                                                        <textarea name="description" id="description" class="form-control" required>{{ $courses->description }}</textarea>
+                                                        {{-- <input type="address" name="description" id="description" class="form-control" required> --}}
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="price" class="form-label">តម្លៃដាក់លក់($):</label>
+                                                        <input type="number" name="price" id="price"
+                                                            class="form-control" value="{{ $courses->price }}" required>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="price_normal" class="form-label">តម្លៃដើម($):</label>
+                                                        <input type="number" name="price_normal" id="price_normal"
+                                                            class="form-control" value="{{ $courses->price_normal }}"
+                                                            required>
+                                                    </div>
+
+
+                                                    <div class="text-center "><button class="btn btn-primary"
+                                                            type="submit">
+                                                            <i class="fa-solid fa-pen"></i> កែប្រែ</button></div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- update end --}}
+                                {{-- show --}}
+                                <!-- Vertically centered scrollable modal -->
+                                <div class="modal fade" id="showModal{{ $courses->id }}" tabindex="-1"
+                                    aria-labelledby="uploadModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-center text-primary" id="uploadModalLabel">
+                                                    បង្ហាញអំពីមុខវិជ្ជា
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row no-gutters">
+                                                    <div class="col-md-4">
+                                                        @if ($courses->imgCourse)
+                                                            <img src="{{ asset('storage/' . $courses->imgCourse) }}"
+                                                                class="img-fluid w-100 rounded-start"
+                                                                alt="{{ $courses->course_name }}">
+                                                        @else
+                                                            <p>No course image available.</p>
+                                                        @endif
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">{{ $courses->course_name }}</h5>
+                                                            <p class="card-text"><strong>ពិពណ៌នា:</strong>
+                                                                {{ $courses->description }}
+                                                            </p>
+                                                            <p class="card-text"><strong>តម្លៃដាក់លក់:</strong>
+                                                                ${{ number_format($courses->price, 2) }}
+                                                            </p>
+                                                            <p class="card-text"><strong>តម្លៃដើម:</strong>
+                                                                ${{ number_format($courses->price_normal, 2) }}</p>
+                                                            <p class="card-text"><strong>បញ្ចូលដោយ:</strong>
+                                                                {{ $courses->user->name }}</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            @endif
-                                            <input type="file" name="imgCourse" class="form-control" id="imgCourse"
-                                                accept="image/*">
-                                            
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="description" class="form-label">ពិពណ៌នា:</label>
-                                            <textarea name="description" id="description" class="form-control" required>{{ $courses->description }}</textarea>
-                                            {{-- <input type="address" name="description" id="description" class="form-control" required> --}}
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="price" class="form-label">តម្លៃដាក់លក់($):</label>
-                                            <input type="number" name="price" id="price" class="form-control"
-                                                value="{{ $courses->price }}" required>
-                                        </div>
 
-                                        <div class="mb-3">
-                                            <label for="price_normal" class="form-label">តម្លៃដើម($):</label>
-                                            <input type="number" name="price_normal" id="price_normal"
-                                                class="form-control" value="{{ $courses->price_normal }}" required>
-                                        </div>
-
-
-                                        <div class="text-center "><button class="btn btn-primary" type="submit">
-                                                   <i class="fa-solid fa-pen"></i> កែប្រែ</button></div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                {{-- update end --}}
-                {{-- show --}}
-                <!-- Vertically centered scrollable modal -->
-                <div class="modal fade" id="showModal{{ $courses->id}}" tabindex="-1" aria-labelledby="uploadModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title text-center text-primary" id="uploadModalLabel">បង្ហាញអំពីមុខវិជ្ជា
-                                </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row no-gutters">
-                                    <div class="col-md-4">
-                                        @if ($courses->imgCourse)
-                                            <img src="{{ asset('storage/' . $courses->imgCourse) }}"
-                                                class="img-fluid w-100 rounded-start" alt="{{ $courses->course_name }}">
-                                        @else
-                                            <p>No course image available.</p>
-                                        @endif
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{ $courses->course_name }}</h5>
-                                            <p class="card-text"><strong>ពិពណ៌នា:</strong> {{ $courses->description }}
-                                            </p>
-                                            <p class="card-text"><strong>តម្លៃដាក់លក់:</strong>
-                                                ${{ number_format($courses->price, 2) }}
-                                            </p>
-                                            <p class="card-text"><strong>តម្លៃដើម:</strong>
-                                                ${{ number_format($courses->price_normal, 2) }}</p>
-                                            <p class="card-text"><strong>បញ្ចូលដោយ:</strong>
-                                                {{ $courses->user->name }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
                             @endforeach
                         </tbody>
                     </table>
-                    
-                <!-- Pagination with search query preserved -->
+
+                    <!-- Pagination with search query preserved -->
                     <nav class="position-relative border-0 shadow-none justify-content-end ">
                         <ul class="pagination ">
                             {{-- Previous Page Link --}}
@@ -358,5 +366,14 @@
                 });
             });
         })
+         document.addEventListener("DOMContentLoaded", function () {
+        const rows = document.querySelectorAll(".clickable-row");
+        rows.forEach(row => {
+            row.addEventListener("click", function () {
+                window.location = this.dataset.href;
+            });
+        });
+    });
     </script>
+
 @endsection

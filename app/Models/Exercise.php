@@ -9,12 +9,16 @@ class Exercise extends Model
 {
     use HasFactory;
     protected $fillable=[
+        'course_id',
         'lesson_id',
         'exercise_element',
     ];
 
     public function lesson(){
         return $this->belongsTo(Lession::class, 'lesson_id');
+     }
+    public function course(){
+        return $this->belongsTo(Course::class, 'course_id');
      }
     public function exerciseImage(){
         return $this->hasMany(ExerciseImage::class);

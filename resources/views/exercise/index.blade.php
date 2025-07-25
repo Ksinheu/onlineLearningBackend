@@ -30,7 +30,7 @@
         <!-- Header -->
         <div class="card p-3 mb-4">
             <div class="d-flex justify-content-between align-items-center flex-wrap">
-                <a href="{{ route('exercise.create') }}" class="btn btn-success me-2 " data-bs-toggle="modal"
+                <a href="{{ route('exercise.create') }} }}" class="btn btn-success me-2 " data-bs-toggle="modal"
                     data-bs-target="#uploadModal">
                     <i class="fa-solid fa-plus"></i> បង្កើត
                 </a>
@@ -39,55 +39,9 @@
         </div>
 
         {{-- create --}}
-        <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title text-center text-primary" id="uploadModalLabel">បញ្ចូលលំហាត់</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('exercise.store') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            {{-- Course Selection --}}
-                            <div class="mb-3">
-                                <label for="lesson" class="form-label">មេរៀន:</label>
-                                <select name="lesson_id" class="form-control" required>
-                                      <option value="">-- ជ្រើសរើសមុខវិជ្ជា --</option>
-                                    @foreach ($lesson as $lessons)
-                                        <option value="{{ $lessons->id }}"
-                                            {{ old('lesson_id') == $lessons->id ? 'selected' : '' }}>
-                                            {{ $lessons->title }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+         @include('exercise.partials.create')
+        
 
-                            {{-- Lesson Title --}}
-                            <div class="mb-3">
-                                <label for="exercise_element" class="form-label">លំហាត់:</label>
-                                <textarea name="exercise_element" class="form-control" rows="3" required></textarea>
-                            </div>
-
-                            {{-- Lesson Content --}}
-                            <div class="mb-3">
-                                <label for="images" class="form-label">រូបភាពលំហាត់ (អាចបញ្ចូលរូបភាពបានច្រើន):</label>
-                                <input type="file" name="images[]" class="form-control" multiple>
-                            </div>
-
-
-
-
-
-                            {{-- Submit Button --}}
-                            <div class="text-center">
-                                <button class="btn btn-primary" type="submit">រក្សាទុក</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
         {{-- create end --}}
 
         <!-- Exercises Table -->
@@ -98,6 +52,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>មុខវិជ្ជា</th>
                                 <th>មេរៀន</th>
                                 <th>លំហាត់</th>
                                 <th>រូបភាព</th>
@@ -108,6 +63,7 @@
                             @foreach ($exercise as $index => $ex)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
+                                    <td>{{ $ex->course->course_name }}</td>
                                     <td>{{ $ex->lesson->title ?? 'N/A' }}</td>
                                     <td>{{ Str::limit($ex->exercise_element, 50) }}</td>
                                     <td>
@@ -118,7 +74,7 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('exercise.edit', $ex->id) }}" class="btn btn-info"
-                                            data-bs-toggle="modal" data-bs-target="#updateModal{{$ex->id}}">
+                                            data-bs-toggle="modal" data-bs-target="#updateModal{{ $ex->id }}">
                                             <i class="fa-solid fa-pen"></i>
                                         </a>
                                         <form id="delete-form-{{ $ex->id }}"
@@ -134,76 +90,7 @@
                                     </td>
                                 </tr>
                                 {{-- update --}}
-                                <div class="modal fade" id="updateModal{{$ex->id}}" tabindex="-1" aria-labelledby="uploadModalLabel"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title text-center text-primary" id="uploadModalLabel">កែប្រែលំហាត់</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form action="{{ route('exercise.update', $ex->id) }}" method="POST"
-                                                    enctype="multipart/form-data">
-                                                    @csrf
-                                                    @method('PUT')
-
-                                                    <!-- Lesson ID -->
-                                                    <div class="mb-3">
-                                                        <label for="lesson_id" class="form-label">មេរៀន:</label>
-                                                        <select name="lesson_id" id="lesson_id" class="form-control">
-                                                            @foreach ($lesson as $lessions)
-                                                                <option value="{{ $lessions->id }}"
-                                                                    {{ $lessions->id == $ex->lesson_id ? 'selected' : '' }}>
-                                                                    {{ $lessions->title }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                        @error('lesson_id')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-
-                                                    <!-- Exercise Element -->
-                                                    <div class="mb-3">
-                                                        <label for="exercise_element" class="form-label">លំហាត់:</label>
-                                                        <input type="text" name="exercise_element"
-                                                            id="exercise_element" class="form-control"
-                                                            value="{{ old('exercise_element', $ex->exercise_element) }}">
-                                                        @error('exercise_element')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-
-                                                    <!-- Existing Images -->
-                                                    <div class="mb-3">
-                                                        <label class="form-label">រូបភាព:</label><br>
-                                                        @foreach ($ex->exerciseImage as $img)
-                                                            <img src="{{ asset('storage/' . $img->image_path) }}"
-                                                                alt="Exercise Image" width="100" class="me-2 mb-2">
-                                                        @endforeach
-                                                    </div>
-
-                                                    <!-- Upload New Images -->
-                                                    <div class="mb-3">
-                                                        <label for="images" class="form-label">បញ្ចូលរូបភាព</label>
-                                                        <input type="file" name="images[]" multiple
-                                                            class="form-control">
-                                                        @error('images.*')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-
-                                                    <!-- Submit Button -->
-                                                    <div class="mb-3 text-center">
-                                                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-pen"></i> កែប្រែ</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                @include('exercise.partials.edit')
                                 {{-- create end --}}
                             @endforeach
                         </tbody>

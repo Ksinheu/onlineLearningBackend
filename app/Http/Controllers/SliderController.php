@@ -100,7 +100,8 @@ public function destroy($id)
     $slider = Slider::findOrFail($id);
 
     // Delete the image file
-    if ($slider->image) {
+     // Delete image from storage (only if exists)
+    if ($slider->image && Storage::disk('public')->exists($slider->image)) {
         Storage::disk('public')->delete($slider->image);
     }
 

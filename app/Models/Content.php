@@ -14,6 +14,7 @@ class Content extends Model
         'session',
         'expect_result',
         'Lesson_content',
+        'video_url',
         'activity',
         'Evaluate'
     ];

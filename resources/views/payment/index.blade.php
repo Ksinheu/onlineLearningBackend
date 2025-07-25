@@ -155,13 +155,13 @@
                                                             <option value="">-- សូមជ្រើសរើសស្ថានភាព --</option>
                                                             <option value="pending"
                                                                 {{ $payment->payment_status == 'pending' ? 'selected' : '' }}>
-                                                                Pending</option>
+                                                                មិនទាន់អនុម័ត</option>
                                                             <option value="completed"
                                                                 {{ $payment->payment_status == 'completed' ? 'selected' : '' }}>
-                                                                Completed</option>
+                                                                អនុម័ត</option>
                                                             <option value="failed"
                                                                 {{ $payment->payment_status == 'failed' ? 'selected' : '' }}>
-                                                                Failed</option>
+                                                                បរាជ័យ</option>
                                                         </select>
                                                     </div>
 

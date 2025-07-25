@@ -53,7 +53,6 @@
                     <div class="modal-body">
                         <form action="{{ route('lession.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-
                             <!-- Course Selection -->
                             <div class="mb-3">
                                 <label for="course_id" class="form-label">ជ្រើសរើសមុខវិជ្ជា:</label>
@@ -74,17 +73,6 @@
                                 <input type="text" name="title" id="title" class="form-control"
                                     value="{{ old('title') }}" required>
                             </div>
-
-
-
-                            <!-- Video Upload -->
-                            <div class="mb-3">
-                                <label for="video_url" class="form-label">បញ្ចូលវីដេអូ (MP4/MOV/AVI/FLV):</label>
-                                <input type="file" name="video_url" id="video_url" class="form-control" accept="video/*"
-                                    required>
-                                <small class="form-text text-muted">អតិបរមា 100MB</small>
-                            </div>
-
                             <!-- Submit Button -->
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary">
@@ -107,8 +95,6 @@
                                 <th>#</th>
                                 <th>ចំណងជើង</th>
                                 <th>មុខវិជ្ជា</th>
-                                {{-- <th>ព័ត៌មានបន្ថែម</th> --}}
-                                {{-- <th>វីដេអូ</th> --}}
                                 <th>សកម្មភាព</th>
                             </tr>
                         </thead>
@@ -118,13 +104,6 @@
                                     <td>{{ $i + $index + 1 }}</td>
                                     <td>{{ $lesson->title }}</td>
                                     <td>{{ $course->find($lesson->course_id)->course_name ?? 'N/A' }}</td>
-                                    {{-- <td>{{ Str::limit($lesson->content, 50) }}</td> --}}
-                                    {{-- <td>
-                                        <video controls width="100px">
-                                            <source src="{{ asset('storage/' . $lesson->video_url) }}" type="video/mp4">
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    </td> --}}
                                     <td>
                                         <a href="{{ route('lession.show', $lesson->id) }}" class="btn btn-warning"
                                             data-bs-toggle="modal" data-bs-target="#showModal{{ $lesson->id }}"><i
@@ -182,21 +161,6 @@
                                                         <input type="text" name="title" id="title"
                                                             class="form-control" value="{{ $lesson->title }}" required>
                                                     </div>
-
-                                                    {{-- Lesson Content --}}
-                                                    {{-- <div class="mb-3">
-                                                        <label for="content" class="form-label">មាតិកា:</label>
-                                                        <textarea name="content" id="content" class="form-control" required>{{ $lesson->content }}</textarea>
-                                                    </div> --}}
-
-                                                    {{-- Video URL --}}
-                                                    <div class="mb-3">
-                                                        <label for="video_url" class="form-label">វីដេអូ:</label>
-                                                        <input type="file" name="video_url" id="video_url"
-                                                            class="form-control" accept="video/*">
-                                                    </div>
-
-
 
                                                     {{-- Submit Button --}}
                                                     <div class="text-center">

@@ -75,6 +75,9 @@ Route::resource('slider', SliderController::class);
 Route::resource('news', NewsController::class);
 // Course
 Route::resource('course',CourseController::class);
+// Route to get all lessons for a course (if needed via controller)
+Route::get('/courses/{course}/lessons', [CourseController::class, 'lessons'])->name('courses.lessons');
+
 // lession
 Route::resource('lession',LessionController::class);
 // assignment
@@ -91,14 +94,17 @@ Route::resource('payment',PurchaseController::class);
 Route::resource('payment_method',PaymentMethodController::class);
 // exercise
 Route::resource('exercise',ExerciseController::class);
+Route::get('/lessons/by-course/{courseId}', [ExerciseController::class, 'getLessonsByCourse']);
+
 // content
 Route::resource('content',ContentController::class);
+Route::get('/lessons/by-course/{courseId}', [ContentController::class, 'getLessonsByCourse']);
 Route::resource('comments', CommentController::class);
 
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/payments', \App\Http\Livewire\AdminPaymentAlerts::class)->name('payments');
 });
-
+Route::get('/exercise/{id}', [ExerciseController::class, 'index'])->name('exercise.byCourse');
 
 
 // this is route for test mail 

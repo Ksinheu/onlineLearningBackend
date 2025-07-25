@@ -89,10 +89,11 @@ class PaymentMethodController extends Controller
 
     public function destroy($id){
         $payment_method=Payment_method::findOrFail($id);
-        // Delete the image file
-        if ($payment_method->QR_code) {
-            Storage::disk('public')->delete($payment_method->QR_code);
-        }
+     
+          // Delete image from storage (only if exists)
+    if ($payment_method->QR_code && Storage::disk('public')->exists($payment_method->QR_code)) {
+        Storage::disk('public')->delete($payment_method->QR_code);
+    }
         $payment_method->delete();
         return redirect()->route('payment_method.index')->with('success','Course deleted successfully!');
     }

@@ -39,7 +39,8 @@
                             <th>#</th>
                             <th>មុខវិជ្ជា</th>
                             <th>មេរៀន</th>
-                            <th>ចំនួនថ្ងៃ</th>
+                            <th>ចំនួនម៉ោង</th>
+                            <th>មាតិកា</th>
                             <th>លទ្ធផល</th>
                             <th>សកម្មភាព</th>
                         </tr>
@@ -50,8 +51,9 @@
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $content->course->course_name ?? 'N/A' }}</td>
                                 <td>{{ $content->lesson->title ?? 'N/A' }}</td>
-                                <td>{{ $content->session }}</td>
-                                <td>{{ Str::limit($content->expect_result, 50) }}</td>
+                                <td>{{ $content->session }}ម៉ោង</td>
+                                <td>{{ Str::limit($content->Lesson_content, 10) }}</td>
+                                <td>{{ Str::limit($content->expect_result, 10) }}</td>
                                 <td>
                                     <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#showModal{{ $content->id }}">
                                         <i class="fa fa-eye"></i>

@@ -12,7 +12,6 @@ class Lession extends Model
     protected $fillable=[
         'course_id',
         'title',
-        'video_url'
     ];
     public function course(){
         return $this->BelongsTo(Course::class,'course_id');

@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
-use App\Models\Course;
-use App\Models\Customer;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -43,6 +41,17 @@ class CommentController extends Controller
             'data' => $comment
         ], 201);
     }
+// Get comments by course ID (returns JSON)
+public function getByCourse($courseId)
+{
+    $comments = Comment::where('course_id', $courseId)->latest()->get();
+
+    return response()->json([
+        'message' => 'Comments retrieved successfully.',
+        'data' => $comments,
+    ], 200);
+}
+
 
     // Display the specified comment
     public function show(Comment $comment)

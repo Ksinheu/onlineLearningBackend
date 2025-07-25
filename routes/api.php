@@ -30,16 +30,18 @@ Route::get('sliderApi', [SliderController::class, 'ApiIndex']);
 Route::get('courseApi', [CourseController::class, 'ApiIndex']);
 Route::get('/courseApi/{id}', [CourseController::class, 'showApi']);
 Route::get('/lessonApi', [LessionController::class, 'ApiIndex']);
-Route::get('/lessons/course/{courseId}', [LessionController::class, 'getLessonsByCourse']);
+Route::get('/lessons/{courseId}', [LessionController::class, 'getLessonsByCourse']);
 Route::get('newsApi', [NewsController::class, 'ApiIndex']);
 Route::post('/payments', [PurchaseController::class, 'store']);
+
 Route::get('/customer/completed-courses', [PurchaseController::class, 'getCompletedCourses']);
 // payment method
 Route::get('/payment_method',[PaymentMethodController::class,'indexApi']);
 Route::post('/comments',[CommentController::class,'store']);
-Route::get('/contents',[ContentController::class,'indexApi']);
+Route::get('/comments/course/{course_id}', [CommentController::class, 'getByCourse']);
+Route::get('/contents/course/{courseId}',[ContentController::class,'indexApi']);
 Route::get('/exercise/{id}',[ExerciseController::class,'showApi']);
-// Route::post('/purchases/{id}/approve', [PurchaseController::class, 'approve']);
+
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetCode']);
 Route::post('/otp-login', [ForgotPasswordController::class, 'loginWithOtp']);
 

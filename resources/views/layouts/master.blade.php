@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{{asset('css/bootstrap.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @yield('link_style')
 </head>
@@ -72,7 +72,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{route('comments.index')}}"
+                        <a href="{{ route('comments.index') }}"
                             class="{{ Request::routeIs('comments.index') ? 'active' : '' }}">
                             <i class="fa-solid fa-envelope"></i>
                             <span class="links_name">មតិយោបល់សិស្ស</span>
@@ -145,9 +145,11 @@
                                 @case('payment')
                                     ទូទាត់
                                 @break
+
                                 @case('comments')
                                     មតិយោបល់សិស្ស
                                 @break
+
                                 @case('exercise')
                                     លំហាត់
                                 @break
@@ -169,17 +171,25 @@
                             @endswitch
                         </span>
                     </div>
-                  
+
                     <div class="profile-details">
                         <img src="{{ asset('images/3135715.png') }}" alt="">
                         <span class="admin_name"> {{ Auth::user()->name }}
                         </span>
-                        {{-- <i class='bx bx-chevron-down ' type="button" id="userDropdown"
-            data-bs-toggle="dropdown" aria-expanded="false" ></i>
-            <ul class="dropdown-menu" aria-labelledby="userDropdown">
-              <!-- Profile Link -->
-              <li><a class="dropdown-item"
-                      href="{{ route('profile.edit') }}">{{ __('Profile') }}</a></li> --}}
+                        <i class='bx bx-chevron-down ' type="button" id="userDropdown" data-bs-toggle="dropdown"
+                            aria-expanded="false"></i>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <!-- Profile Link -->
+                            <li ><a href="#" class="text-decoration-none">
+                                    
+                                    <span class="links_name">
+                                        <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item"><i class='bx bx-log-out fs-6'></i> {{ __('ចេញ') }}</button>
+                                        </form>
+                                    </span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </nav>
@@ -187,14 +197,14 @@
             </div>
 
         </div>
-        <footer  class="footer bg-white border-top text-center text-muted small py-2" style="margin-left: 16.666667%;">
-  <div class="container">
-    <span>&copy; 2025 Online Learning System | Version 1.0.0</span>
-  </div>
-</footer>
+        <footer class="footer bg-white border-top text-center text-muted small py-2" style="margin-left: 16.666667%;">
+            <div class="container">
+                <span>Created by PCC &copy; 2025 | Version 1.0.0</span>
+            </div>
+        </footer>
     </div>
     {{-- <livewire:payment /> --}}
-    <script src="{{asset('js/bootstrap.js')}}"></script>
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
     {{-- @livewire('admin-payment-alerts') --}}
     @livewireScripts
     {{-- @push('scripts')
@@ -211,5 +221,6 @@
     @endpush --}}
 </body>
 @yield('script')
-<script src="{{asset('js/function.js')}}"></script>
+<script src="{{ asset('js/function.js') }}"></script>
+
 </html>

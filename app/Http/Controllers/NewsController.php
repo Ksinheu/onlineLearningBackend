@@ -89,10 +89,10 @@ class NewsController extends Controller
     {
         $news = News::findOrFail($id);
 
-        // Delete the image file
-        if ($news->imageNews) {
-            Storage::disk('public')->delete($news->imageNews);
-        }
+          // Delete image from storage (only if exists)
+    if ($news->imageNews && Storage::disk('public')->exists($news->imageNews)) {
+        Storage::disk('public')->delete($news->imageNews);
+    }
 
         // Delete the record
         $news->delete();

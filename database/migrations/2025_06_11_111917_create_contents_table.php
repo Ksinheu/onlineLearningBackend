@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('session');
             $table->text('expect_result');
             $table->text('Lesson_content');
+            $table->string('video_url');
             $table->text('activity');
             $table->text('Evaluate');
             $table->timestamps();
