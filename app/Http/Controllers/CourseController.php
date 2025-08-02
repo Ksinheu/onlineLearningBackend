@@ -28,7 +28,7 @@ class CourseController extends Controller
 }
 
     public function ApiIndex(){
-        $course=Course::all();
+        $course=Course::with('lession','content','comment')->get();
         return response()->json([
             'message'=>'Course retrieved scussessfuly!',
             'course'=>$course
@@ -150,4 +150,5 @@ public function lessons(Request $request, $courseId)
 
     return view('course.lessons', compact('course', 'lessons'));
 }
+
 }

@@ -7,7 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('content.update', $content->id) }}" method="POST">
+                <form action="{{ route('content.update', $content->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf @method('PUT')
                     <div class="mb-3">
                         <label>មុខវិជ្ជា:</label>
@@ -31,7 +31,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="mb-3"><label>សម័យ:</label><input type="text" name="session" class="form-control"
+                    <div class="mb-3"><label>រយៈពេល:</label><input type="text" name="session" class="form-control"
                             value="{{ $content->session }}" required></div>
                     <div class="mb-3"><label>លទ្ធផល:</label>
                         <textarea name="expect_result" class="form-control" required>{{ $content->expect_result }}</textarea>

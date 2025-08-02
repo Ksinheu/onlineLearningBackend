@@ -3,7 +3,7 @@
 @section('content')
 <div class="home-content">
     <div class="card p-4 shadow-sm">
-        <h5 class="text-primary text-center mb-4">ព័ត៌មានទំនិញ (Payment Details)</h5>
+        <h5 class="text-primary text-center mb-4">ព័ត៌មានការទូទាត់របស់សិស្ស</h5>
 
         <div class="row">
             <div class="col-md-6">
@@ -13,10 +13,10 @@
             </div>
             <div class="col-md-6">
                 <p><strong>ស្ថានភាពបង់ប្រាក់:</strong>
-                    @if($payment->payment_status === 'paid')
-                        <span class="badge bg-success">បានបង់</span>
+                    @if($payment->payment_status === 'completed')
+                        <span class="badge bg-success p-2 fs-6">បានបង់</span>
                     @else
-                        <span class="badge bg-danger">មិនទាន់បង់</span>
+                        <span class="badge bg-danger p-2 fs-6">មិនទាន់បង់</span>
                     @endif
                 </p>
                 <p><strong>Pay Slip:</strong></p>

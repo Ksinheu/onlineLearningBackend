@@ -102,12 +102,12 @@
                             @foreach ($lession as $index => $lesson)
                                 <tr>
                                     <td>{{ $i + $index + 1 }}</td>
-                                    <td>{{ $lesson->title }}</td>
+                                    <td class="clickable-row" data-href="{{route('lession.contents',$lesson->id)}}">{{ $lesson->title }}</td>
                                     <td>{{ $course->find($lesson->course_id)->course_name ?? 'N/A' }}</td>
                                     <td>
-                                        <a href="{{ route('lession.show', $lesson->id) }}" class="btn btn-warning"
+                                        {{-- <a href="{{ route('lession.show', $lesson->id) }}" class="btn btn-warning"
                                             data-bs-toggle="modal" data-bs-target="#showModal{{ $lesson->id }}"><i
-                                                class="fa-solid fa-eye"></i></a>
+                                                class="fa-solid fa-eye"></i></a> --}}
                                         <a href="{{ route('lession.edit', $lesson->id) }}" class="btn btn-info"
                                             data-bs-toggle="modal" data-bs-target="#updateModal{{ $lesson->id }}"><i
                                                 class="fa-solid fa-pen"></i></a>
@@ -175,7 +175,7 @@
                                 {{-- update end --}}
                                 {{-- show --}}
                                 <!-- Vertically centered scrollable modal -->
-                                <div class="modal fade" id="showModal{{ $lesson->id }}" tabindex="-1"
+                                {{-- <div class="modal fade" id="showModal{{ $lesson->id }}" tabindex="-1"
                                     aria-labelledby="uploadModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg p-5 modal-dialog-centered modal-dialog-scrollable">
                                         <div class="modal-content">
@@ -189,7 +189,7 @@
                                                 <h1>{{ $lesson->title }}</h1>
                                                 <p><strong>Course:</strong>
                                                     {{ $course->find($lesson->course_id)->course_name ?? 'N/A' }}</p>
-                                                {{-- <p><strong>Content:</strong> {{ $lesson->content }}</p> --}}
+                                                {{-- <p><strong>Content:</strong> {{ $lesson->content }}</p>
                                                 <h3>Video</h3>
                                                 <video controls>
                                                     <source src="{{ asset('storage/' . $lesson->video_url) }}"
@@ -199,7 +199,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 {{-- update end --}}
                             @endforeach
                         </tbody>
@@ -276,6 +276,14 @@
                             deleteForm.submit();
                         }
                     });
+                });
+            });
+        });
+        document.addEventListener("DOMContentLoaded", function() {
+            const rows = document.querySelectorAll(".clickable-row");
+            rows.forEach(row => {
+                row.addEventListener("click", function() {
+                    window.location = this.dataset.href;
                 });
             });
         });

@@ -41,6 +41,17 @@ class LessionController extends Controller
         'lessons' => $lessons
     ]);
 }
+public function countLessonsByCourse($courseId)
+{
+    $count = Lession::where('course_id', $courseId)->count();
+
+    return response()->json([
+        'success' => true,
+        'course_id' => $courseId,
+        'lesson_count' => $count
+    ]);
+}
+
     public function create(){
         $course=Course::all();
         return view('lession.create',compact('course'));
@@ -105,4 +116,21 @@ public function update(Request $request, $id)
         $lession->delete();
         return redirect()->route('lession.index')->with('success','Lession deleted successfully!');
     }
+
+    public function contents(Request $request, $lessonID)
+{
+    $search = $request->input('search');
+
+    $lesson = Lession::findOrFail($lessonID);
+
+    $contents = $lesson->content()
+        ->when($search, function ($query, $search) {
+            return $query->where('lesson_content', 'like', '%' . $search . '%');
+        })
+        ->latest()
+        ->paginate(5);
+
+    return view('lession.contents', compact('lesson', 'contents'));
+}
+
 }

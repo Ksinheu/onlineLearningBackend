@@ -119,10 +119,11 @@
                         </thead>
                         <tbody>
                             @foreach ($course as $index => $courses)
-                                <tr  class="clickable-row" data-href="{{ route('courses.lessons', $courses->id) }}">
+                                <tr>
                                     <td>{{ $i + $index + 1 }}</td>
                                     <td>{{ $user->find($courses->user_id)->name ?? 'N/A' }}</td>
-                                    <td>{{ $courses->course_name }}</td>
+                                    <td class="clickable-row" data-href="{{ route('courses.lessons', $courses->id) }}">
+                                        {{ $courses->course_name }}</td>
                                     <td>{{ Str::limit($courses->description, 50) }}</td>
                                     <td>${{ number_format($courses->price, 2) }}</td>
                                     <td>${{ number_format($courses->price_normal, 2) }}</td>
@@ -150,7 +151,7 @@
                                                     class="fa-solid fa-trash"></i></button>
                                         </form>
                                     </td>
-                                    
+
                                 </tr>
                                 {{-- update --}} {{-- update --}}
                                 <!-- Vertically centered scrollable modal -->
@@ -275,6 +276,7 @@
                                     </div>
                                 </div>
                             @endforeach
+
                         </tbody>
                     </table>
 
@@ -366,14 +368,14 @@
                 });
             });
         })
-         document.addEventListener("DOMContentLoaded", function () {
-        const rows = document.querySelectorAll(".clickable-row");
-        rows.forEach(row => {
-            row.addEventListener("click", function () {
-                window.location = this.dataset.href;
+        document.addEventListener("DOMContentLoaded", function() {
+            const rows = document.querySelectorAll(".clickable-row");
+            rows.forEach(row => {
+                row.addEventListener("click", function() {
+                    window.location = this.dataset.href;
+                });
             });
         });
-    });
     </script>
 
 @endsection

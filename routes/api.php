@@ -31,6 +31,7 @@ Route::get('courseApi', [CourseController::class, 'ApiIndex']);
 Route::get('/courseApi/{id}', [CourseController::class, 'showApi']);
 Route::get('/lessonApi', [LessionController::class, 'ApiIndex']);
 Route::get('/lessons/{courseId}', [LessionController::class, 'getLessonsByCourse']);
+Route::get('/lessons/count/course/{courseId}', [LessionController::class, 'countLessonsByCourse']);
 Route::get('newsApi', [NewsController::class, 'ApiIndex']);
 Route::post('/payments', [PurchaseController::class, 'store']);
 
@@ -39,8 +40,12 @@ Route::get('/customer/completed-courses', [PurchaseController::class, 'getComple
 Route::get('/payment_method',[PaymentMethodController::class,'indexApi']);
 Route::post('/comments',[CommentController::class,'store']);
 Route::get('/comments/course/{course_id}', [CommentController::class, 'getByCourse']);
+Route::get('/comments/count/course/{courseId}', [CommentController::class, 'countCommentsByCourse']);
+
 Route::get('/contents/course/{courseId}',[ContentController::class,'indexApi']);
-Route::get('/exercise/{id}',[ExerciseController::class,'showApi']);
+Route::get('/contents/count/course/{id}', [ContentController::class, 'countByCourseId']);
+
+Route::get('/exercise/{courseId}',[ExerciseController::class,'showApi']);
 
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetCode']);
 Route::post('/otp-login', [ForgotPasswordController::class, 'loginWithOtp']);

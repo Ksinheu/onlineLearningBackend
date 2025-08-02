@@ -83,18 +83,29 @@ public function getLessonsByCourse($courseId)
         //  return response()->json(['message' => 'Exercise created', 'exercise' => $exercise->load('exerciseImage')], 201);
         return redirect()->route('exercise.index')->with('success', 'Exercise created successfully!');
     }
+    public function showApi($courseId)
+{
+    $exercises=Exercise::with('course','lesson','exerciseImage')->where('course_id',$courseId)->get();
+    return response()->json([
+        'status' => true,
+        'lesson_id' => $courseId,
+        'exercises' => $exercises
+    ]);
+}
 
-    public function showApi($id)
-    {
-        $exercise = Exercise::where('lesson_id', $id)->get();
-        return response()->json(['exercise' => $exercise]);
-    }
-    public function edit($id)
-    {
-        $exercise = Exercise::findOrFail($id);
-        $lession = Lession::all();
-        return view('exercise.edit', compact('exercise', 'lession'));
-    }
+ public function edit($id)
+{
+    $exercise = Exercise::findOrFail($id);
+    $courses = Course::all();
+    $selectedCourseId = $exercise->course_id;
+
+    $lessons = $selectedCourseId
+        ? Lession::where('course_id', $selectedCourseId)->get()
+        : collect();
+
+    return view('exercise.edit', compact('exercise', 'courses', 'lessons', 'selectedCourseId'));
+}
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -134,23 +145,6 @@ public function getLessonsByCourse($courseId)
 
         return redirect()->route('exercise.index')->with('success', 'Exercise updated successfully!');
     }
-    // public function destroy($id)
-    // {
-    //     // 1. Find the exercise
-    //     $exercise = Exercise::findOrFail($id);
-
-    //     // 2. Delete related images from storage and database
-    //     $exercise->exerciseImage()->get()->each(function ($img) {
-    //         Storage::disk('public')->delete($img->image_path); // Delete file
-    //         $img->delete(); // Delete DB record
-    //     });
-
-    //     // 3. Delete the exercise itself
-    //     $exercise->delete();
-
-    //     return redirect()->route('exercise.index')->with('success', 'Exercise deleted successfully!');
-    // }
-
     public function destroy($id)
     {
         $exercise = Exercise::findOrFail($id);

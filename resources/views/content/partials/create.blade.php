@@ -29,7 +29,7 @@
                         </select>
                     </div>
 
-                    <div class="mb-3"><label>ចំនួនម៉ោង:</label><input type="text" name="session"
+                    <div class="mb-3"><label>រយៈពេល:</label><input type="text" name="session"
                             class="form-control" required></div>
                     <div class="mb-3"><label>លទ្ធផល:</label>
                         <textarea name="expect_result" class="form-control" required></textarea>
@@ -44,7 +44,7 @@
                             required>
                         <small class="form-text text-muted">អតិបរមា 100MB</small>
                     </div>
-                    <div class="mb-3"><label>សកម្មភាព:</label>
+                    <div class="mb-3"><label>សកម្មភាពសិស្ស:</label>
                         <textarea name="activity" class="form-control" required></textarea>
                     </div>
                     <div class="mb-3"><label>ការវាយតម្លៃ:</label>

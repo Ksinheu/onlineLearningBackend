@@ -25,19 +25,19 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>មុខវិជ្ជា</th>
                         <th>ចំណងជើង</th>
-                        <th>ឯកសារ</th>
-                        <th>សកម្មភាព</th>
+                        {{-- <th>សកម្មភាព</th> --}}
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($course->lession as $i => $lesson)
                         <tr>
                             <td>{{ $i + 1 }}</td>
-                            <td>{{ $lesson->title }}</td>
-                            <td>{{ Str::limit($course->course_name, 50) }}</td>
                             
-                            <td>
+                            <td>{{ Str::limit($course->course_name, 50) }}</td>
+                            <td>{{ $lesson->title }}</td>
+                            {{-- <td>
                                 <a href="{{ route('lession.show', $lesson->id) }}" class="btn btn-warning"
                                     data-bs-toggle="modal" data-bs-target="#showModal{{ $lesson->id }}"><i
                                         class="fa-solid fa-eye"></i></a>
@@ -53,7 +53,7 @@
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
-                            </td>
+                            </td> --}}
                         </tr>
                     @endforeach
                 </tbody>

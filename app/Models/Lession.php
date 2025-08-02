@@ -21,6 +21,6 @@ class Lession extends Model
         return $this->hasMany(Exercise::class);
     }
      public function content(){
-        return $this->hasMany(Content::class);
+        return $this->hasMany(Content::class, 'lesson_id');
     }
 }

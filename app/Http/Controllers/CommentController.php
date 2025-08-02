@@ -85,4 +85,15 @@ public function getByCourse($courseId)
 
         return redirect()->route('comments.index')->with('success', 'Comment deleted successfully.');
     }
+    public function countCommentsByCourse($courseId)
+{
+    $count = Comment::where('course_id', $courseId)->count();
+
+    return response()->json([
+        'success' => true,
+        'course_id' => $courseId,
+        'comment_count' => $count
+    ]);
+}
+
 }

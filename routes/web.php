@@ -80,6 +80,7 @@ Route::get('/courses/{course}/lessons', [CourseController::class, 'lessons'])->n
 
 // lession
 Route::resource('lession',LessionController::class);
+Route::get('/lession/{lessonID}/content', [LessionController::class, 'contents'])->name('lession.contents');
 // assignment
 Route::resource('assignment',AssignmentController::class);
 // submission
